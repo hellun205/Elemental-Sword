@@ -41,6 +41,7 @@ namespace Player {
     private void Update() {
       Jump();
       CheckGround();
+      TestAttack();
     }
 
     #region Movement
@@ -88,5 +89,11 @@ namespace Player {
     }
 
     #endregion
+
+    private void TestAttack() {
+      if (Input.GetKeyDown(KeyCode.LeftShift)) {
+        anim.SetTrigger("attack");
+      }
+    }
   }
 }
