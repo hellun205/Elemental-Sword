@@ -34,12 +34,12 @@ namespace Object.Entity.Player {
 
     private void Start() {
       // StartCoroutine(SpawnCoroutine());
-      PoolManager.Get(PoolType.Enemy, new Vector2(0, 5));
+      PoolManager.Get(PoolType.Enemy_Frog, new Vector2(0, 5));
     }
 
     private IEnumerator SpawnCoroutine() {
       while (true) {
-        PoolManager.Get(PoolType.Enemy, new Vector2(0, 5));
+        PoolManager.Get(PoolType.Enemy_Frog, new Vector2(0, 5));
         yield return new WaitForSeconds(5f);
       }
     }

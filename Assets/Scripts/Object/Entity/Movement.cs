@@ -19,6 +19,9 @@ namespace Object.Entity {
     [HideInInspector]
     public bool canFlip = true;
 
+    [HideInInspector]
+    public Direction currentDirection;
+
     [Header("Check Ground")]
     [SerializeField]
     private string groundTag = "Ground";
@@ -69,7 +72,7 @@ namespace Object.Entity {
     protected void Move(float amount) => direction = amount;
 
     protected void CheckGround() {
-      var pos = transform.position;
+      var pos = GetColliderCenter();
       const float distance = 0.1f;
       pos.y -= checkDistanceY;
       // left
@@ -99,6 +102,15 @@ namespace Object.Entity {
         _ => scale.x
       };
       transform.localScale = scale;
+
+      currentDirection = scale.x > 0 ? Direction.Right : Direction.Left;
+    }
+
+    protected Vector2 GetColliderCenter() {
+      var position = (Vector2)transform.position;
+      var offset = collider.offset;
+
+      return position + offset;
     }
   }
 }

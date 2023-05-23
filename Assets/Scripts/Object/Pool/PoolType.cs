@@ -1,6 +1,6 @@
 ﻿namespace Object.Pool {
   public enum PoolType {
-    Enemy,
+    Enemy_Frog,
     
   }
 }

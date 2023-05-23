@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4990607466104864712}
   - component: {fileID: 8146048205551986645}
   - component: {fileID: 4224872808896579688}
+  - component: {fileID: 8871636213466869245}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -147,3 +148,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+--- !u!114 &8871636213466869245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5623260901661608570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3260418e1424ff2b72a9d07a689a60a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collider: {fileID: 4990607466104864712}
+  direction: 0
+  moveSpeed: 1
+  jumpPower: 3
+  canFlip: 1
+  currentDirection: 0
+  groundTag: Ground
+  walkingAnim: 
+  jumpingAnim: 
+  moveLeft: 1
+  moveRight: 1
+  thinkTime: 3
+  checkPlayer: 0
+  checkPlayerDistance: 3
+  isFollowingPlayer: 0
+  followingPlayerSpeed: 2
+  playerDistance: 0.5
+  checkGround: 1
+  jumping: 1
