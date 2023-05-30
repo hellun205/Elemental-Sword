@@ -5,11 +5,9 @@ namespace Object.Entity.Fighter
 {
   public abstract class FighterController : MonoBehaviour
   {
-    public Status status { get; set; }
+    public Status status;
 
-    public Element? firstElement;
-
-    public Element secondElement;
+    public Element hitElement;
 
     public abstract void Attack();
 

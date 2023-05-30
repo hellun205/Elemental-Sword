@@ -1,30 +1,40 @@
-﻿namespace Object.Sword
+﻿using System;
+
+namespace Object.Sword
 {
+  [Flags]
   public enum Element
   {
     /// <summary>
+    /// 없음
+    /// </summary>
+    None = 0,
+    
+    /// <summary>
     /// 불
     /// </summary>
-    Fire,
-    
+    Fire = 1 << 0,
+
     /// <summary>
     /// 물
     /// </summary>
-    Water,
-    
+    Water = 1 << 1,
+
     /// <summary>
     /// 전기
     /// </summary>
-    Electricity,
-    
+    Electricity = 1 << 2,
+
     /// <summary>
     /// 풀
     /// </summary>
-    Grass,
-    
+    Grass = 1 << 3,
+
     /// <summary>
     /// 땅
     /// </summary>
-    Land,
+    Land = 1 << 4,
+    
+    All = int.MaxValue, 
   }
 }
