@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Object.Entity.Enemy;
 using Object.Pool;
 using UnityEngine;
 
@@ -34,8 +35,10 @@ namespace Object.Entity.Player {
 
     private void Start() {
       // StartCoroutine(SpawnCoroutine());
-      PoolManager.Get(PoolType.Enemy_Frog, new Vector2(0, 5));
+      // PoolManager.Get(PoolType.Enemy_Frog, new Vector2(0, 5));
+      PoolManager.Get<Frog>(new Vector2(0f, 5f));
     }
+    
 
     private IEnumerator SpawnCoroutine() {
       while (true) {
