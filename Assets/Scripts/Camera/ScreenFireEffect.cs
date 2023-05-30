@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Manager;
+using UnityEditor;
 using UnityEngine;
 
 namespace Camera
@@ -53,7 +54,7 @@ namespace Camera
   
     private void OnValidate()
     {
-      ReSizeFires();
+      EditorApplication.delayCall += ReSizeFires;
     }
 
     private void ReSizeFires()
