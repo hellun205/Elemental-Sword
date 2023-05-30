@@ -13,7 +13,7 @@ namespace Manager
       else
         Destroy(gameObject);
       
-      if (this is IDontDestroyable)
+      if (this is IDontDestroy)
         DontDestroyOnLoad(gameObject);
     }
   }

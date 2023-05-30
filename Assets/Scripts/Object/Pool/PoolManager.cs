@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Manager;
-using Object.Entity.Enemy;
 using UnityEngine;
 using UnityEngine.Pool;
 
 namespace Object.Pool {
-  public class PoolManager : SingleTon<PoolManager>, IDontDestroyable {
+  public class PoolManager : SingleTon<PoolManager>, IDontDestroy {
     private Dictionary<PoolType, IObjectPool<PoolManagement>> pool;
 
     public Transform container;

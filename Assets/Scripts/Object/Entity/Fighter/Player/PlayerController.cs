@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
-using Object.Entity.Enemy;
+﻿using System.Collections;
+using Object.Entity.Fighter.Enemy;
 using Object.Pool;
 using UnityEngine;
 
-namespace Object.Entity.Player {
+namespace Object.Entity.Fighter.Player {
   public class PlayerController : MonoBehaviour {
     public static PlayerController Instance { get; private set; }
     private Rigidbody2D rigid;

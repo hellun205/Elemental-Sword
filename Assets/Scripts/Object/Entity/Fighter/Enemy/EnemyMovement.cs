@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
-using Object.Entity.Player;
+﻿using System.Collections;
+using Object.Entity.Fighter.Player;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Object.Entity.Enemy {
+namespace Object.Entity.Fighter.Enemy {
   public class EnemyMovement : Movement {
     [Header("Move Logic - enemy")]
     [SerializeField]

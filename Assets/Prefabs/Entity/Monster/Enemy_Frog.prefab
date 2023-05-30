@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8344667275704688261}
   - component: {fileID: 6667520148052251874}
   - component: {fileID: 7742956105752480510}
+  - component: {fileID: 941171828812575611}
   m_Layer: 0
   m_Name: Enemy_Frog
   m_TagString: Untagged
@@ -148,7 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71503c83ef094c88a4634c1d259fe989, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
 --- !u!95 &6667520148052251874
 Animator:
   serializedVersion: 5
@@ -201,3 +201,32 @@ MonoBehaviour:
   playerDistance: 0.5
   checkGround: 1
   jumping: 1
+--- !u!114 &941171828812575611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533149051058298007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d583917f02f44a7dae058b0f924472b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  status:
+    elementSetting:
+    - element: 0
+      resistance: 0
+      damage: 0
+    - element: 1
+      resistance: 0
+      damage: 0
+    - element: 3
+      resistance: 0
+      damage: 0
+    - element: 4
+      resistance: 0
+      damage: 0
+    - element: 2
+      resistance: 0
+      damage: 0

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Object.Entity.Player {
+namespace Object.Entity.Fighter.Player {
   public class PlayerMovement : Movement {
     [Header("Movement - player")]
     [SerializeField]

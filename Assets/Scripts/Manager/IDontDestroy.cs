@@ -1,6 +1,6 @@
 ﻿namespace Manager
 {
-  public interface IDontDestroyable
+  public interface IDontDestroy
   {
     
   }
