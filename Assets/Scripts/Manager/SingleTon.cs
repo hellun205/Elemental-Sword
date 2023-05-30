@@ -11,7 +11,10 @@ namespace Manager
       if (instance is null)
         instance = (T)this;
       else
+      {
+        Debug.LogError($"Singleton {typeof(T).Name} has multiple objects.");
         Destroy(gameObject);
+      }
       
       if (this is IDontDestroy)
         DontDestroyOnLoad(gameObject);
