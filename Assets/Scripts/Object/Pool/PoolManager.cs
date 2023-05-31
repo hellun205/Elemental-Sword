@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Manager;
 using UnityEngine;
 using UnityEngine.Pool;
+using Utils;
 
 namespace Object.Pool {
   public class PoolManager : SingleTon<PoolManager>, IDontDestroy {
@@ -45,16 +46,9 @@ namespace Object.Pool {
     }
 
     public static T Get<T>(Vector2 position) where T : PoolManagement
-      => (T)Get(GetType(typeof(T)), position);
+      => (T)Get(typeof(T).GetTypeProperty<PoolType>(), position);
 
     public static void Release(PoolManagement obj) => instance.pool[obj.type].Release(obj);
-
-    private static PoolType GetType(Type obj)
-    {
-      var type = obj.GetProperty("Type");
-      if (type is null)
-        throw new Exception("Object type is null.");
-      return (PoolType)type.GetValue(null);
-    }
+    
   }
 }

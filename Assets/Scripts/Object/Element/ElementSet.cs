@@ -1,17 +1,18 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace Object.Sword
+namespace Object.Element
 {
   [Serializable]
   public struct ElementSet
   {
-    public Element element;
+    public ElementType elementType;
 
     [Range(0f, 1f)]
     public float resistance;
 
-    [Min(0f)]
-    public float damage;
+    [Range(0f, 1f)]
+    public float armor;
   }
 }

@@ -6,7 +6,7 @@ namespace Object.Entity.Fighter
   {
     public float damage;
 
-    public Element element;
+    public Element.ElementType ElementType;
     
   }
 }

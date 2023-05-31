@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Object.Sword
+namespace Object.Element
 {
   [Flags]
-  public enum Element
+  public enum ElementType
   {
     /// <summary>
     /// 없음

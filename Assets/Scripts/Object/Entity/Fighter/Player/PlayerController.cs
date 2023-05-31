@@ -4,16 +4,17 @@ using Object.Pool;
 using UnityEngine;
 
 namespace Object.Entity.Fighter.Player {
-  public class PlayerController : MonoBehaviour {
-    public static PlayerController Instance { get; private set; }
+  public class PlayerController : FighterController {
     private Rigidbody2D rigid;
     private Animator anim;
-    
+
+
+    public override void Attack()
+    {
+      throw new System.NotImplementedException();
+    }
 
     private void Awake() {
-      if (Instance == null) Instance = this;
-      else Destroy(gameObject);
-      DontDestroyOnLoad(gameObject);
       rigid = GetComponent<Rigidbody2D>();
       anim = GetComponent<Animator>();
       

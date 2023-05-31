@@ -77,15 +77,15 @@ namespace Object.Entity.Fighter.Enemy {
         }
       }
       if (isFollowingPlayer) {
-        var playerPos = PlayerController.Instance.transform.position;
+        // var playerPos = PlayerController.Instance.transform.position;
         var thisPos = transform.position;
-        var dir = thisPos.x > playerPos.x ? -1f : 1f;
+        // var dir = thisPos.x > playerPos.x ? -1f : 1f;
 
         var rayPos = GetColliderCenter();
         rayPos.x += collider.bounds.extents.x * (int)currentDirection;
         var hit = Physics2D.Raycast(rayPos, Vector2.right * (int)currentDirection, playerDistance);
         Debug.DrawRay(rayPos, Vector2.right * ((int)currentDirection * playerDistance));
-        Move(hit && hit.transform.CompareTag("Player") ? 0f : dir);
+        // Move(hit && hit.transform.CompareTag("Player") ? 0f : dir);
       }
     }
 

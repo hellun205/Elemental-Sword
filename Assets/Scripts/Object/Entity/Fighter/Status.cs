@@ -1,4 +1,5 @@
 ﻿using System;
+using Object.Element;
 using Object.Sword;
 
 namespace Object.Entity.Fighter

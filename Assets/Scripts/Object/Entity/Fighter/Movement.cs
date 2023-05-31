@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Object.Entity {
+namespace Object.Entity.Fighter {
   public class Movement : MonoBehaviour {
     protected new Rigidbody2D rigidbody;
 
