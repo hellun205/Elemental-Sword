@@ -179,6 +179,10 @@ PrefabInstance:
       value: Enemy_Frog
       objectReference: {fileID: 0}
     - target: {fileID: 533149051058298007, guid: b0b2638dc07cf484583dab658471a40e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 533149051058298007, guid: b0b2638dc07cf484583dab658471a40e, type: 3}
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
@@ -276,7 +280,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1065872410
 Rigidbody2D:
   serializedVersion: 4
@@ -432,7 +436,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1065872409}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.48, y: -0.49, z: 0}
+  m_LocalPosition: {x: -5.64, y: -0.57, z: 0}
   m_LocalScale: {x: 3.4914, y: 3.4914, z: 3.4914}
   m_ConstrainProportionsScale: 0
   m_Children: []

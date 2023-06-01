@@ -1,7 +1,10 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using Animation;
 using Manager;
 using UnityEditor;
 using UnityEngine;
+using Utils;
 
 namespace Camera
 {
@@ -20,7 +23,7 @@ namespace Camera
     [SerializeField]
     private SpriteRenderer right;
 
-    private SpriteRenderer[] all => new[] { top, left, right, bottom };
+    private List<SpriteRenderer> all => new() { top, left, right, bottom };
 
     private UnityEngine.Camera mainCamera => UnityEngine.Camera.main;
 
@@ -36,13 +39,22 @@ namespace Camera
     [SerializeField]
     private float invisibleDistance = 0f;
 
-    private Coroutine colorChange;
-    private Coroutine visibilityChange;
+    // Animation
+    private Changef visibilityAnim;
+
+    private ChangeColor colorAnim;
 
     protected override void Awake()
     {
       base.Awake();
       ReSizeFires();
+      visibilityAnim = new Changef(this, value =>
+      {
+        distance = value;
+        ReSizeFires();
+      }, distance);
+
+      colorAnim = new ChangeColor(this, color => all.ForEach(sr => sr.color = color), top.color);
     }
 
     private void LateUpdate()
@@ -51,7 +63,7 @@ namespace Camera
       tempSize = mainCamera.aspect;
       ReSizeFires();
     }
-  
+
     private void OnValidate()
     {
       EditorApplication.delayCall += ReSizeFires;
@@ -73,59 +85,27 @@ namespace Camera
       right.transform.localPosition = new Vector3(width / 2 - distance, 0f, 1f);
     }
 
-    private IEnumerator ColorChangeCRT(Color toColor, float smoothing = 3f)
+
+    public void ChangeColor(Color color, float speed = 3f)
+      => colorAnim.Start(top.color, color, speed);
+
+    public void SetVisibility(bool visible, float speed = 3f)
+      => visibilityAnim.Start(distance, visible ? visibleDistance : invisibleDistance, speed);
+
+    private void Start()
+    {
+      StartCoroutine(Test());
+    }
+
+    private IEnumerator Test()
     {
       while (true)
       {
-        foreach (var sr in all)
-        {
-          sr.color = Color.Lerp(sr.color, toColor, Time.deltaTime * smoothing);
-          if (sr.color == toColor)
-            yield break;
-        }
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(2.5f);
+        ChangeColor(Color.blue, 1f);
+        yield return new WaitForSeconds(2.5f);
+        ChangeColor(Color.red, 1f);
       }
     }
-
-    public void ChangeColor(Color color, float smoothing = 3f)
-    {
-      if (colorChange is not null) StopCoroutine(colorChange);
-      colorChange = StartCoroutine(ColorChangeCRT(color, smoothing));
-    }
-
-    private IEnumerator VisibilityChangeCRT(bool visibie, float smoothing = 3f)
-    {
-      while (true)
-      {
-        var toDistance = visibie ? visibleDistance : invisibleDistance;
-        distance = Mathf.Lerp(distance, toDistance, Time.deltaTime * smoothing);
-        ReSizeFires();
-        if (Mathf.Approximately(distance, toDistance))
-          yield break;
-        yield return new WaitForEndOfFrame();
-      }
-    }
-
-    public void SetVisibility(bool visible, float smoothing = 3f)
-    {
-      if (visibilityChange is not null) StopCoroutine(visibilityChange);
-      visibilityChange = StartCoroutine(VisibilityChangeCRT(visible, smoothing));
-    }
-
-    // private void Start()
-    // {
-    //   StartCoroutine(Test());
-    // }
-    //
-    // private IEnumerator Test()
-    // {
-    //   while (true)
-    //   {
-    //     SetVisibility(false);
-    //     yield return new WaitForSeconds(2.5f);
-    //     SetVisibility(true);
-    //     yield return new WaitForSeconds(2.5f);
-    //   }
-    // }
   }
 }
