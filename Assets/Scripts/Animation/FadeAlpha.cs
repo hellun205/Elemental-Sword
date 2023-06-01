@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Animation
 {
-  public class FadeAlpha : BaseAnimation<Color>
+  public class FadeAlpha : BaseAnimation<FadeAlpha,Color>
   {
     private bool isFadeIn;
 
@@ -21,6 +21,7 @@ namespace Animation
         SetValue(color);
         timer += Time.unscaledDeltaTime * Speed;
       }
+      CallEndEvent();
     }
 
     public void In(float? speed = null)

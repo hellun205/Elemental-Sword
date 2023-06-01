@@ -4,23 +4,20 @@ using UnityEngine;
 
 namespace Animation
 {
-  public class ChangeColor : BaseAnimation<ChangeColor, Color>
+  public class ChangeColorSmooth : BaseAnimation<ChangeColorSmooth,Color>
   {
     private Color start;
     private Color end;
     
     protected override IEnumerator AnimationRoutine()
     {
-      var timer = 0f;
       SetValue(start);
       
       while (!Value.Equals(end))
       {
         yield return new WaitForEndOfFrame();
-        SetValue(Color.Lerp(start, end, timer));
-        timer += Time.unscaledDeltaTime * Speed;
+        SetValue(Color.Lerp(Value, end, Time.unscaledDeltaTime * Speed));
       }
-      
       CallEndEvent();
     }
 
@@ -32,7 +29,7 @@ namespace Animation
       base.Start(speed);
     }
     
-    public ChangeColor(MonoBehaviour sender, Action<Color> onValueChange, Color defaultValue)
+    public ChangeColorSmooth(MonoBehaviour sender, Action<Color> onValueChange, Color defaultValue)
       : base(sender, onValueChange, defaultValue)
     {
     }

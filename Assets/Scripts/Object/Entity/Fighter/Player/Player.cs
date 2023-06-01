@@ -4,7 +4,7 @@ using Object.Pool;
 using UnityEngine;
 
 namespace Object.Entity.Fighter.Player {
-  public class PlayerController : FighterController {
+  public class Player : FighterController {
     private Rigidbody2D rigid;
     private Animator anim;
 
@@ -33,18 +33,18 @@ namespace Object.Entity.Fighter.Player {
       }
     }
 
-    private void Start() {
-      // StartCoroutine(SpawnCoroutine());
-      // PoolManager.Get(PoolType.Enemy_Frog, new Vector2(0, 5));
-      PoolManager.Get<Frog>(new Vector2(0f, 5f));
-    }
-    
-
-    private IEnumerator SpawnCoroutine() {
-      while (true) {
-        PoolManager.Get(PoolType.Enemy_Frog, new Vector2(0, 5));
-        yield return new WaitForSeconds(5f);
-      }
-    }
+    // private void Start() {
+    //   // StartCoroutine(SpawnCoroutine());
+    //   // PoolManager.Get(PoolType.Enemy_Frog, new Vector2(0, 5));
+    //   PoolManager.Get<Frog>(new Vector2(0f, 5f));
+    // }
+    //
+    //
+    // private IEnumerator SpawnCoroutine() {
+    //   while (true) {
+    //     PoolManager.Get(PoolType.Enemy_Frog, new Vector2(0, 5));
+    //     yield return new WaitForSeconds(5f);
+    //   }
+    // }
   }
 }
