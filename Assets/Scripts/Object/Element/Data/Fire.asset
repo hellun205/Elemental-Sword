@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee5c6cdb06384feeb7911b486f3e071a, type: 3}
   m_Name: Fire
   m_EditorClassIdentifier: 
-  type: 0
+  type: 1
   damage: 1
+  color: {r: 1, g: 0.33256447, b: 0.16509432, a: 1}
   dotDamage: 1
   dotSpeed: 2
   time: 5

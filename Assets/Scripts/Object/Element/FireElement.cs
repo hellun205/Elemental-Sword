@@ -16,6 +16,7 @@ namespace Object.Element
 
     public float time;
 
+
     private void Awake()
     {
       type = Type;

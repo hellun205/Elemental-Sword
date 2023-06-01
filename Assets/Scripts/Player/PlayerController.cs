@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Animation;
+using Camera;
 using Manager;
 using Object.Element;
 using UnityEngine;
@@ -48,9 +50,9 @@ namespace Player
     private void Update()
     {
       if (Input.GetKey(Managers.Key.changeElement))
-        Open();
+        OpenSelector();
       else if (selectorCanvas.alpha >= 1f)
-        Close();
+        CloseSelector();
 
       if (selectorCanvas.alpha == 0f) return;
 
@@ -59,26 +61,37 @@ namespace Player
         Vector3.Lerp(elementContainer.transform.position, pos, Time.unscaledDeltaTime * 10f);
     }
 
-    private void Open()
+    private void OpenSelector()
     {
       if (!isActive)
       {
         isActive = true;
+        elementContainer.transform.position = mainCamera.WorldToScreenPoint(player.transform.position);
         alphaAnim.Start(0f, 1f, OpenSpeed);
         sizeAnim.Start(CloseSize, OpenSize, OpenSpeed);
       }
     }
 
-    private void Close()
+    private void CloseSelector()
     {
       if (isActive)
       {
         isActive = false;
-        Debug.Log(ElementSelector.SelectedElement);
         currentElement = ElementSelector.SelectedElement;
         alphaAnim.Start(1f, 0f, CloseSpeed);
-        sizeAnim.Start(OpenSize, CloseSize, CloseSize);
+        sizeAnim.Start(OpenSize, CloseSize, CloseSpeed);
+        SetElement(currentElement);
       }
+    }
+
+    private void SetElement(ElementType element)
+    {
+      ScreenFireEffect.instance.SetVisibility(element != ElementType.None);
+      if (element == ElementType.None) return;
+      
+      var color = ElementMgr.instance.elements.Single(x => x.type == element).color;
+
+      ScreenFireEffect.instance.ChangeColor(color);
     }
   }
 }

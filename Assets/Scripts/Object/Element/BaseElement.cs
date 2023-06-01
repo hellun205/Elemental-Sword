@@ -9,6 +9,8 @@ namespace Object.Element
 
     public float damage;
 
+    public Color color;
+
     public virtual void Attack(FighterController opponent)
     {
       var set = GetElementSet(opponent);

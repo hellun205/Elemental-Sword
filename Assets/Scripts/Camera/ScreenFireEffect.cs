@@ -64,10 +64,10 @@ namespace Camera
       ReSizeFires();
     }
 
-    private void OnValidate()
-    {
-      EditorApplication.delayCall += ReSizeFires;
-    }
+    // private void OnValidate()
+    // {
+    //    EditorApplication.delayCall += ReSizeFires;
+    // }
 
     private void ReSizeFires()
     {
@@ -92,20 +92,20 @@ namespace Camera
     public void SetVisibility(bool visible, float speed = 3f)
       => visibilityAnim.Start(distance, visible ? visibleDistance : invisibleDistance, speed);
 
-    private void Start()
-    {
-      StartCoroutine(Test());
-    }
+    // private void Start()
+    // {
+    //   StartCoroutine(Test());
+    // }
 
-    private IEnumerator Test()
-    {
-      while (true)
-      {
-        yield return new WaitForSeconds(2.5f);
-        ChangeColor(Color.blue, 1f);
-        yield return new WaitForSeconds(2.5f);
-        ChangeColor(Color.red, 1f);
-      }
-    }
+    // private IEnumerator Test()
+    // {
+    //   while (true)
+    //   {
+    //     yield return new WaitForSeconds(2.5f);
+    //     ChangeColor(Color.blue, 1f);
+    //     yield return new WaitForSeconds(2.5f);
+    //     ChangeColor(Color.red, 1f);
+    //   }
+    // }
   }
 }
