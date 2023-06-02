@@ -14,20 +14,23 @@ namespace Animation
 
     protected MonoBehaviour sender { get; private set; }
 
-    public BaseCoroutine AnimCoroutine { get; private set; }
+    public BaseCoroutine AnimCoroutine { get; }
 
     public TValue Value { get; private set; }
 
     public float Speed { get; set; } = 1f;
+    
+    public bool IsUnscaled { get; set; }
 
     protected abstract IEnumerator AnimationRoutine();
 
     private Action<TValue> onValueChange;
 
-    protected BaseAnimation(MonoBehaviour sender, Action<TValue> onValueChange, TValue defaultValue)
+    protected BaseAnimation(MonoBehaviour sender, Action<TValue> onValueChange, TValue defaultValue, bool isUnscaled = false)
     {
       this.sender = sender;
       this.onValueChange = onValueChange;
+      IsUnscaled = isUnscaled;
       SetValue(defaultValue);
       AnimCoroutine = new BaseCoroutine(sender, AnimationRoutine);
     }
@@ -49,6 +52,9 @@ namespace Animation
     }
     
     protected void CallStartedEvent() => OnStartedAnimation?.Invoke((T)this);
+    
     protected void CallEndEvent() => OnEndAnimation?.Invoke((T)this);
+
+    protected float DeltaTime => IsUnscaled ? Time.unscaledDeltaTime : Time.deltaTime;
   }
 }

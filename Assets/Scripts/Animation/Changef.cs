@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Animation
 {
-  public class Changef : BaseAnimation<Changef,float>
+  public class Changef : BaseAnimation<Changef, float>
   {
     private float start;
     private float end;
@@ -13,13 +13,14 @@ namespace Animation
     {
       var timer = 0f;
       SetValue(start);
-      
+
       while (!Mathf.Approximately(Value, end))
       {
         yield return new WaitForEndOfFrame();
         SetValue(Mathf.Lerp(start, end, timer));
-        timer += Time.unscaledDeltaTime * Speed;
+        timer += DeltaTime * Speed;
       }
+
       CallEndEvent();
     }
 
@@ -30,9 +31,9 @@ namespace Animation
 
       base.Start(speed);
     }
-    
-    public Changef(MonoBehaviour sender, Action<float> onValueChange, float defaultValue)
-      : base(sender, onValueChange, defaultValue)
+
+    public Changef(MonoBehaviour sender, Action<float> onValueChange, float defaultValue, bool isUnscaled = false) :
+      base(sender, onValueChange, defaultValue, isUnscaled)
     {
     }
   }

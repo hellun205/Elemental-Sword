@@ -4,23 +4,21 @@ using UnityEngine;
 
 namespace Animation
 {
-  public class FadeAlpha : BaseAnimation<FadeAlpha,Color>
+  public class FadeSmooth : BaseAnimation<FadeSmooth, Color>
   {
     private bool isFadeIn;
 
     protected override IEnumerator AnimationRoutine()
     {
-      var timer = 0f;
-      var start = Value;
       var to = isFadeIn ? 1f : 0f;
       while (!Mathf.Approximately(Value.a, to))
       {
         yield return new WaitForEndOfFrame();
         var color = Value;
-        color.a = Mathf.Lerp(start.a, to, timer);
+        color.a = Mathf.Lerp(color.a, to, DeltaTime * Speed);
         SetValue(color);
-        timer += Time.unscaledDeltaTime * Speed;
       }
+
       CallEndEvent();
     }
 
@@ -35,9 +33,10 @@ namespace Animation
       isFadeIn = false;
       Start(speed);
     }
-    
-    public FadeAlpha(MonoBehaviour sender, Action<Color> onValueChange, Color defaultValue)
-      : base(sender, onValueChange, defaultValue)
+
+
+    public FadeSmooth(MonoBehaviour sender, Action<Color> onValueChange, Color defaultValue, bool isUnscaled = false) :
+      base(sender, onValueChange, defaultValue, isUnscaled)
     {
     }
   }

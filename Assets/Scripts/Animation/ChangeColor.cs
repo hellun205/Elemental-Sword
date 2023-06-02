@@ -8,19 +8,19 @@ namespace Animation
   {
     private Color start;
     private Color end;
-    
+
     protected override IEnumerator AnimationRoutine()
     {
       var timer = 0f;
       SetValue(start);
-      
+
       while (!Value.Equals(end))
       {
         yield return new WaitForEndOfFrame();
         SetValue(Color.Lerp(start, end, timer));
-        timer += Time.unscaledDeltaTime * Speed;
+        timer += DeltaTime * Speed;
       }
-      
+
       CallEndEvent();
     }
 
@@ -31,9 +31,9 @@ namespace Animation
 
       base.Start(speed);
     }
-    
-    public ChangeColor(MonoBehaviour sender, Action<Color> onValueChange, Color defaultValue)
-      : base(sender, onValueChange, defaultValue)
+
+    public ChangeColor(MonoBehaviour sender, Action<Color> onValueChange, Color defaultValue, bool isUnscaled = false) :
+      base(sender, onValueChange, defaultValue, isUnscaled)
     {
     }
   }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Animation
 {
-  public class ChangefSmooth : BaseAnimation<ChangefSmooth,float>
+  public class ChangefSmooth : BaseAnimation<ChangefSmooth, float>
   {
     private float start;
     private float end;
@@ -12,12 +12,13 @@ namespace Animation
     protected override IEnumerator AnimationRoutine()
     {
       SetValue(start);
-      
+
       while (!Mathf.Approximately(Value, end))
       {
         yield return new WaitForEndOfFrame();
-        SetValue(Mathf.Lerp(Value, end, Time.unscaledDeltaTime * Speed));
+        SetValue(Mathf.Lerp(Value, end, DeltaTime * Speed));
       }
+
       CallEndEvent();
     }
 
@@ -29,8 +30,8 @@ namespace Animation
       base.Start(speed);
     }
     
-    public ChangefSmooth(MonoBehaviour sender, Action<float> onValueChange, float defaultValue)
-      : base(sender, onValueChange, defaultValue)
+    public ChangefSmooth(MonoBehaviour sender, Action<float> onValueChange, float defaultValue, bool isUnscaled = false)
+      : base(sender, onValueChange, defaultValue, isUnscaled)
     {
     }
   }
