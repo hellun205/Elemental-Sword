@@ -4,7 +4,7 @@ using Object.Pool;
 using UnityEngine;
 
 namespace Object.Entity.Fighter.Player {
-  public class Player : FighterController {
+  public class PlayerController : FighterController {
     private Rigidbody2D rigid;
     private Animator anim;
 

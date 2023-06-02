@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Player
 {
-  public class PlayerController : SingleTon<PlayerController>
+  public class Player : SingleTon<Player>
   {
     private const float CloseSize = 0.1f;
     private const float OpenSize = 1f;
@@ -27,7 +27,7 @@ namespace Player
 
     private ChangefSmooth sizeAnim;
 
-    private Object.Entity.Fighter.Player.Player player;
+    private Object.Entity.Fighter.Player.PlayerController player;
     private UnityEngine.Camera mainCamera;
 
     private bool isActive;
@@ -35,7 +35,7 @@ namespace Player
     protected override void Awake()
     {
       base.Awake();
-      player = FindObjectOfType<Object.Entity.Fighter.Player.Player>();
+      player = FindObjectOfType<Object.Entity.Fighter.Player.PlayerController>();
       mainCamera = UnityEngine.Camera.main;
       selectorCanvas = GameObject.Find("@Elemental Swiper").GetComponent<CanvasGroup>();
       elementContainer = GameObject.Find("@Elements").GetComponent<Image>();

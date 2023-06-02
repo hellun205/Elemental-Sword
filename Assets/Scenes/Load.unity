@@ -1483,6 +1483,10 @@ MonoBehaviour:
   setting: {fileID: 11400000, guid: 0c2a364580a3b9948bceb71603a54208, type: 2}
   elements:
   - {fileID: 11400000, guid: 9d25c7940f9701c4b9c8303b4dfca8d1, type: 2}
+  - {fileID: 11400000, guid: 54f485ede1931d34e903a259da7c3a88, type: 2}
+  - {fileID: 11400000, guid: 008e1654fc70f8843a63c6e0e9acac35, type: 2}
+  - {fileID: 11400000, guid: 481071c5de0ff6a40aa0fcb55e34be9a, type: 2}
+  - {fileID: 11400000, guid: 4c7476d8929a8a24ab0b3d3aba684601, type: 2}
 --- !u!4 &1455458845
 Transform:
   m_ObjectHideFlags: 0

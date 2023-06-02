@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Object.Element
 {
-  public abstract class BaseElement : ScriptableObject
+  [CreateAssetMenu(fileName = "Base", menuName = "Element/Base", order = 0)]
+  public class BaseElement : ScriptableObject
   {
     public ElementType type;
 
