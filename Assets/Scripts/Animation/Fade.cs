@@ -1,44 +1,28 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
+using Utils;
 
 namespace Animation
 {
-  public class Fade : BaseAnimation<Fade, Color>
+  public abstract class Fade<T> : Lerper<T, Color> where T : Fade<T>
   {
-    private bool isFadeIn;
+    private const float fadeInValue = 1f;
+    private const float fadeOutValue = 0f;
 
-    protected override IEnumerator AnimationRoutine()
+    protected override LerpDelegate lerp => (a, b, t) => value.Setter(a: Mathf.Lerp(a.a, b.a, t));
+
+    protected override EqualDelegate endChecker => (a, b) => Mathf.Approximately(a.a, b.a);
+
+    public void FadeIn(float speed) => Start(fadeInValue, speed);
+
+    public void FadeOut(float speed) => Start(fadeOutValue, speed);
+
+    public void Start(float endAlpha, float speed)
     {
-      var timer = 0f;
-      var start = Value;
-      var to = isFadeIn ? 1f : 0f;
-      while (!Mathf.Approximately(Value.a, to))
-      {
-        yield return new WaitForEndOfFrame();
-        var color = Value;
-        color.a = Mathf.Lerp(start.a, to, timer);
-        SetValue(color);
-        timer += DeltaTime * Speed;
-      }
-
-      CallEndEvent();
+      var color = value;
+      Start(color, color.Setter(a: endAlpha), speed);
     }
-
-    public void In(float? speed = null)
-    {
-      isFadeIn = true;
-      Start(speed);
-    }
-
-    public void Out(float? speed = null)
-    {
-      isFadeIn = false;
-      Start(speed);
-    }
-
-    public Fade(MonoBehaviour sender, Action<Color> onValueChange, Color defaultValue, bool isUnscaled = false) : base(
-      sender, onValueChange, defaultValue, isUnscaled)
+    protected Fade(MonoBehaviour sender, StructPointer<Color> valuePointer) : base(sender, valuePointer)
     {
     }
   }

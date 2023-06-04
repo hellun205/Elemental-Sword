@@ -1,60 +1,72 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using Utils;
 
 namespace Animation
 {
-  public abstract class BaseAnimation<T, TValue> where T : BaseAnimation<T, TValue>
+  public abstract class BaseAnimation<T, TValue> where T : BaseAnimation<T, TValue> where TValue : struct
   {
-    public delegate void AnimationEventListener(T sender);
+    protected delegate TValue LerpDelegate(TValue a, TValue b, float t);
 
-    public event AnimationEventListener OnStartedAnimation;
-    public event AnimationEventListener OnEndAnimation;
-
-    protected MonoBehaviour sender { get; private set; }
-
-    public BaseCoroutine AnimCoroutine { get; }
-
-    public TValue Value { get; private set; }
-
-    public float Speed { get; set; } = 1f;
+    protected delegate bool EqualDelegate(TValue a, TValue b);
     
-    public bool IsUnscaled { get; set; }
+    public delegate void animationEventListener(T sender);
 
-    protected abstract IEnumerator AnimationRoutine();
+    public event animationEventListener onStarted;
 
-    private Action<TValue> onValueChange;
+    public event animationEventListener onEnded;
 
-    protected BaseAnimation(MonoBehaviour sender, Action<TValue> onValueChange, TValue defaultValue, bool isUnscaled = false)
+    protected MonoBehaviour sender { get; }
+
+    public Coroutiner coroutiner { get; }
+
+    protected StructPointer<TValue> pointer { get; }
+
+    public bool isUnscaled { get; set; } = false;
+
+    public float timeout { get; set; } = 10f;
+    
+    protected float currentTimeout;
+
+    public TValue value
     {
+      get => pointer.value;
+      protected set => pointer.value = value;
+    }
+    
+    protected TValue startValue;
+    
+    protected TValue endValue;
+    
+    protected float speed;
+
+    protected abstract IEnumerator Routine();
+
+    protected BaseAnimation(MonoBehaviour sender, StructPointer<TValue> valuePointer)
+    {
+      pointer = valuePointer;
       this.sender = sender;
-      this.onValueChange = onValueChange;
-      IsUnscaled = isUnscaled;
-      SetValue(defaultValue);
-      AnimCoroutine = new BaseCoroutine(sender, AnimationRoutine);
+      coroutiner = new Coroutiner(sender, Routine);
     }
 
-    public void Start(float? speed = null)
+    public void Start(TValue start, TValue end, float speed)
     {
-      if (speed is not null)
-        Speed = speed.Value;
-      AnimCoroutine.Start();
+      this.speed = speed;
+      startValue = start;
+      endValue = end;
+      currentTimeout = 0f;
+      coroutiner.Start();
       CallStartedEvent();
     }
 
-    public void Stop() => AnimCoroutine.Stop();
-
-    public void SetValue(TValue value)
-    {
-      Value = value;
-      onValueChange.Invoke(Value);
-    }
+    protected void CallStartedEvent() => onStarted?.Invoke((T) this);
     
-    protected void CallStartedEvent() => OnStartedAnimation?.Invoke((T)this);
-    
-    protected void CallEndEvent() => OnEndAnimation?.Invoke((T)this);
+    protected void CallEndedEvent() => onEnded?.Invoke((T) this);
 
-    protected float DeltaTime => IsUnscaled ? Time.unscaledDeltaTime : Time.deltaTime;
+    protected float time => (isUnscaled ? Time.unscaledDeltaTime : Time.deltaTime) * speed;
+
+    protected bool isTimeOut => currentTimeout >= timeout;
+
+    protected void SpendTime() => currentTimeout += Time.unscaledDeltaTime;
   }
 }
