@@ -7,16 +7,23 @@ namespace Animation.Preset
   {
     private CanvasGroup canvasGroup { get; }
     private Transform transform { get; }
-
+    
     public PanelVisibler(MonoBehaviour sender) : base(sender)
     {
-      // Set Components
       canvasGroup = sender.GetComponent<CanvasGroup>();
       transform = sender.transform;
+      InitAnimation();
+    }
 
-      // Preset Variables
+    public PanelVisibler(MonoBehaviour sender, Transform transform, CanvasGroup canvasGroup) : base(sender)
+    {
+      this.transform = transform;
+      this.canvasGroup = canvasGroup;
+      InitAnimation();
+    }
 
-      // Set Animation
+    private void InitAnimation()
+    {
       animation = new(sender,
         new(() => transform.localScale, value => transform.localScale = value),
         new(() => canvasGroup.alpha, value => canvasGroup.alpha = value))
@@ -25,8 +32,10 @@ namespace Animation.Preset
         maxSize = transform.localScale,
         minAlpha = 0f,
         maxAlpha = 1f,
-        fadeAnimSpeed = 6f,
-        sizeAnimSpeed = 8f
+        fadeShowAnimSpeed = 6f,
+        fadeHideAnimSpeed = 6f,
+        sizeShowAnimSpeed = 8f,
+        sizeHideAnimSpeed = 8f
       };
 
       animation.onStarted += _ => canvasGroup.blocksRaycasts = true;

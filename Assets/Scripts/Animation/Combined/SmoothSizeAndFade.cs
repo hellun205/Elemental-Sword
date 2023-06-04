@@ -10,11 +10,14 @@ namespace Animation.Combined
 
     public Vector2 minSize = Vector2.zero;
     public Vector2 maxSize = Vector2.one;
+    
     public float minAlpha = 0f;
     public float maxAlpha = 1f;
 
-    public float sizeAnimSpeed = 1f;
-    public float fadeAnimSpeed = 1f;
+    public float sizeShowAnimSpeed = 1f;
+    public float fadeShowAnimSpeed = 1f;
+    public float sizeHideAnimSpeed = 1f;
+    public float fadeHideAnimSpeed = 1f;
 
     private float _tmpZ;
 
@@ -74,15 +77,15 @@ namespace Animation.Combined
     {
       isFadeIn = true;
       CallStartEvent();
-      animSize.Start(ToVector3(minSize), ToVector3(maxSize), sizeAnimSpeed);
-      animFade.Start(minAlpha, maxAlpha, fadeAnimSpeed);
+      animSize.Start(ToVector3(minSize), ToVector3(maxSize), sizeShowAnimSpeed);
+      animFade.Start(minAlpha, maxAlpha, fadeShowAnimSpeed);
     }
 
     public void Hide()
     {
       isFadeIn = false;
-      animSize.Start(ToVector3(size.value), ToVector3(minSize), sizeAnimSpeed);
-      animFade.Start(alpha.value, minAlpha, fadeAnimSpeed);
+      animSize.Start(ToVector3(size.value), ToVector3(minSize), sizeHideAnimSpeed);
+      animFade.Start(alpha.value, minAlpha, fadeHideAnimSpeed);
     }
 
     private void OnFadeEnded(StraightFloat smoothFloat)

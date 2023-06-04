@@ -40,21 +40,21 @@ namespace Camera
     private float invisibleDistance = 0f;
 
     // Animation
-    private Changef visibilityAnim;
+    private SmoothFloat visibilityAnim;
 
-    private ChangeColor colorAnim;
+    private StraightColor colorAnim;
 
     protected override void Awake()
     {
       base.Awake();
       ReSizeFires();
-      visibilityAnim = new Changef(this, value =>
+      visibilityAnim = new(this, new(() => distance, value =>
       {
         distance = value;
         ReSizeFires();
-      }, distance);
+      }));
 
-      colorAnim = new ChangeColor(this, color => all.ForEach(sr => sr.color = color), top.color);
+      colorAnim = new(this, new(() => top.color, value => all.ForEach(sr => sr.color = value)));
     }
 
     private void LateUpdate()

@@ -3,11 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Utils
 {
   public static class Utility
   {
+    public static void SetCursorPosToObject(Transform transform)
+      => SetCursorPos(transform.position.WorldToScreenPoint());
+
+    public static void SetCursorPos(Vector2 position)
+      => Mouse.current.WarpCursorPosition(position);
+
+    public static Vector2 WorldToScreenPoint(this Vector2 world) => MainCam.WorldToScreenPoint(world);
+
+    public static Vector2 ScreenToWorldPoint(this Vector2 world) => MainCam.ScreenToWorldPoint(world);
+
+    public static Vector3 WorldToScreenPoint(this Vector3 world) => MainCam.WorldToScreenPoint(world);
+
+    public static Vector3 ScreenToWorldPoint(this Vector3 world) => MainCam.ScreenToWorldPoint(world);
+
+    public static UnityEngine.Camera MainCam => UnityEngine.Camera.main;
+
     public static T GetTypeProperty<T>(this Type obj, string propertyName = "Type") where T : Enum
     {
       var type = obj.GetProperty(propertyName);
@@ -71,14 +88,12 @@ namespace Utils
       return result;
     }
 
-    private static UnityEngine.Camera Cam => UnityEngine.Camera.main;
-
     public static Vector3 WorldToScreenSpace(this RectTransform canvas, Vector3 worldPos)
     {
-      Vector3 screenPoint = Cam.WorldToScreenPoint(worldPos);
+      Vector3 screenPoint = MainCam.WorldToScreenPoint(worldPos);
       screenPoint.z = 0;
 
-      if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas, screenPoint, Cam, out var screenPos))
+      if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas, screenPoint, MainCam, out var screenPos))
         return screenPos;
 
       return screenPoint;

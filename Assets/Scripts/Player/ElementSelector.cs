@@ -1,8 +1,10 @@
 ﻿using Animation;
+using Animation.Combined;
 using Object.Element;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Utils;
 
 namespace Player
 {
@@ -10,10 +12,10 @@ namespace Player
   public class ElementSelector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
   {
     public static ElementType SelectedElement { get; private set; }
-    
-    private const float EnterSize = 1.4f;
 
-    private const float NormalSize = 1f;
+    private readonly Vector2 EnterSize = new(1.4f, 1.4f);
+
+    private readonly Vector2 NormalSize = new(1f, 1f);
 
     private const float EnterAlpha = 0.8f;
 
@@ -30,41 +32,42 @@ namespace Player
     private ElementType element;
 
     // Animations
-    private ChangefSmooth sizeAnim;
-    private ChangefSmooth alphaAnim;
+    private SmoothSizeAndFade anim;
 
     private void Reset()
     {
       img = GetComponent<Image>();
-      var clr = img.color;
-      clr.a = NormalAlpha;
-      img.color = clr;
-      transform.localScale = new Vector3(NormalSize, NormalSize);
+      img.color = img.color.Setter(a: NormalAlpha);
+      transform.localScale = ((Vector3) NormalSize).Setter(z: 1);
     }
 
     private void Awake()
     {
       img.alphaHitTestMinimumThreshold = 1f;
-      sizeAnim = new ChangefSmooth(this, value => transform.localScale = new Vector3(value, value), NormalSize);
-      alphaAnim = new ChangefSmooth(this, value =>
+      anim = new(this,
+        new StructPointer<Vector3>(() => transform.localScale, value => transform.localScale = value),
+        new StructPointer<float>(() => img.color.a, value => img.color = img.color.Setter(a: value)))
       {
-        var color = img.color;
-        color.a = value;
-        img.color = color;
-      }, NormalAlpha);
+        maxSize = EnterSize,
+        minSize = NormalSize,
+        maxAlpha = EnterAlpha,
+        minAlpha = NormalAlpha,
+        fadeShowAnimSpeed = EnterAnimSpeed,
+        sizeShowAnimSpeed = EnterAnimSpeed,
+        fadeHideAnimSpeed = ExitAnimSpeed,
+        sizeHideAnimSpeed = ExitAnimSpeed,
+      };
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-      sizeAnim.Start(transform.localScale.x, EnterSize, EnterAnimSpeed);
-      alphaAnim.Start(img.color.a, EnterAlpha, EnterAnimSpeed);
+      anim.Show();
       SelectedElement = element;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-      sizeAnim.Start(transform.localScale.x, NormalSize, ExitAnimSpeed);
-      alphaAnim.Start(img.color.a, NormalAlpha, ExitAnimSpeed);
+      anim.Hide();
       SelectedElement = ElementType.None;
     }
   }

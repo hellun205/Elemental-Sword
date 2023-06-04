@@ -1,18 +1,18 @@
-﻿using System;
-using System.Linq;
-using Animation;
+﻿using System.Linq;
+using Animation.Preset;
 using Camera;
 using Manager;
 using Object.Element;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace Player
 {
   public class Player : SingleTon<Player>
   {
-    private const float CloseSize = 0.1f;
-    private const float OpenSize = 1f;
+    private readonly Vector2 CloseSize = new(.1f, .1f);
+    private readonly Vector2 OpenSize = new(1f, 1f);
     private const float CloseSpeed = 9f;
     private const float OpenSpeed = 9f;
 
@@ -23,9 +23,7 @@ namespace Player
     private Image elementContainer;
 
     // Animations
-    private Changef alphaAnim;
-
-    private ChangefSmooth sizeAnim;
+    private PanelVisibler anim;
 
     private Object.Entity.Fighter.Player.PlayerController player;
     private UnityEngine.Camera mainCamera;
@@ -41,10 +39,18 @@ namespace Player
       elementContainer = GameObject.Find("@Elements").GetComponent<Image>();
       selectorCanvas.alpha = 0f;
 
-      alphaAnim = new Changef(this, value => { selectorCanvas.alpha = value; }, 0f);
-
-      sizeAnim = new ChangefSmooth(this,
-        value => { elementContainer.transform.localScale = new Vector3(value, value); }, CloseSize);
+      anim = new(this, elementContainer.transform, selectorCanvas)
+      {
+        animation =
+        {
+          maxAlpha = 1f,
+          minAlpha = 0f,
+          fadeShowAnimSpeed = OpenSpeed,
+          maxSize = OpenSize,
+          minSize = CloseSize,
+          sizeShowAnimSpeed = OpenSpeed,
+        }
+      };
     }
 
     private void Update()
@@ -67,8 +73,8 @@ namespace Player
       {
         isActive = true;
         elementContainer.transform.position = mainCamera.WorldToScreenPoint(player.transform.position);
-        alphaAnim.Start(0f, 1f, OpenSpeed);
-        sizeAnim.Start(CloseSize, OpenSize, OpenSpeed);
+        UnityEngine.InputSystem.Mouse.current.WarpCursorPosition(player.transform.position.WorldToScreenPoint());
+        anim.Show();
       }
     }
 
@@ -78,8 +84,7 @@ namespace Player
       {
         isActive = false;
         currentElement = ElementSelector.SelectedElement;
-        alphaAnim.Start(1f, 0f, CloseSpeed);
-        sizeAnim.Start(OpenSize, CloseSize, CloseSpeed);
+        anim.Hide();
         SetElement(currentElement);
       }
     }
@@ -88,7 +93,7 @@ namespace Player
     {
       ScreenFireEffect.instance.SetVisibility(element != ElementType.None);
       if (element == ElementType.None) return;
-      
+
       var color = ElementMgr.instance.elements.Single(x => x.type == element).color;
 
       ScreenFireEffect.instance.ChangeColor(color);
