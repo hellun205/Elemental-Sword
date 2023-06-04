@@ -37,5 +37,24 @@ namespace Object.Entity.Fighter
 
     [HideInInspector]
     public float SlowedValue;
+
+    public const float BurningSpeed = 0.6f;
+    
+    public const float FastBurningSpeed = 0.35f;
+
+    [HideInInspector]
+    public bool isBurning;
+    
+    [HideInInspector]
+    public bool isFastBurning;
+
+    public float burningSpeed => isFastBurning ? FastBurningSpeed : BurningSpeed;
+    
+    [HideInInspector]
+    public bool isStrongBurn;
+
+    public float burningDamage => maxHp * (isStrongBurn ? 0.09f : 0.05f);
+
+    public void Heal(float amount) => hp = Mathf.Min(maxHp, hp + Mathf.Abs(amount));
   }
 }

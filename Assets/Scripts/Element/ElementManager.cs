@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Manager;
 using Object.Entity.Fighter;
+using Object.Entity.Fighter.Player;
 using UnityEngine;
 
 namespace Element
@@ -10,6 +11,9 @@ namespace Element
     public delegate void ElementAttack();
 
     public delegate void PassiveAtk(FighterController attacker, FighterController target);
+
+    public const float SlowDuration = 2f;
+    public const float StunDuration = 1f;
 
     public readonly Dictionary<SingleElement, ElementInfo> elementSetting = new()
     {
@@ -54,6 +58,41 @@ namespace Element
 
     private static void FirePassive(FighterController attacker, FighterController target)
     {
+      const float burningDuration = 5f;
+      
+      switch (target.damagedElement)
+      {
+        default:
+        {
+          break;
+        }
+      }
+      target.AddState(State.Burning, burningDuration);
+    }
+
+    private static void WaterPassive(FighterController attacker, FighterController target)
+    {
+      // 불 -> 물
+      if (target.HasState(State.Burning))
+      {
+        target.StopState(State.Burning);
+      }
+      
+      switch (target.damagedElement)
+      {
+        // 풀 -> 물
+        case SingleElement.Grass:
+        {
+          target.status.Heal();
+          break;
+        }
+        
+      }
+      target.AddState(State.Slow, SlowDuration);
+    }
+
+    private static void GrassPassive(FighterController attacker, FighterController target)
+    {
       switch (target.damagedElement)
       {
         default:
@@ -64,24 +103,34 @@ namespace Element
       }
     }
 
-    private static void WaterPassive(FighterController attacker, FighterController target)
-    {
-      throw new System.NotImplementedException();
-    }
-
-    private static void GrassPassive(FighterController attacker, FighterController target)
-    {
-      throw new System.NotImplementedException();
-    }
-
     private static void LandPassive(FighterController attacker, FighterController target)
     {
-      throw new System.NotImplementedException();
+      switch (target.damagedElement)
+      {
+        default:
+        {
+          break;
+        }
+      }
     }
 
     private static void ElectricityPassive(FighterController attacker, FighterController target)
     {
-      throw new System.NotImplementedException();
+      switch (target.damagedElement)
+      {
+        default:
+        {
+
+
+          break;
+        }
+      }
+      if (attacker is PlayerController)
+      {
+            
+      }
+      else
+        target.AddState(State.Stun, StunDuration);
     }
 
     #endregion

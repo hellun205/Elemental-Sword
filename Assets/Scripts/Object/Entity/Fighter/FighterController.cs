@@ -22,6 +22,8 @@ namespace Object.Entity.Fighter
 
     private Dictionary<State, StateCoroutiner> stateCoroutines;
 
+    private Coroutiner burningCoroutine;
+
     public abstract void Attack();
 
     private void Awake()
@@ -34,6 +36,8 @@ namespace Object.Entity.Fighter
         { State.Slow, new(new Coroutiner(this, SlowCoroutine), 0f) },
         { State.Stun, new(new Coroutiner(this, StunCoroutine), 0f) },
       };
+
+      burningCoroutine = new(this, Burning);
     }
 
 
@@ -119,20 +123,36 @@ namespace Object.Entity.Fighter
     {
       foreach (State _state in Enum.GetValues(typeof(State)))
       {
-        if (_state == State.None) continue;
-        if ((stateToAdd & _state) != 0)
-        {
-          stateCoroutines[_state].duration = duration;
-          stateCoroutines[_state].coroutine.Start();
-        }
+        if (_state == State.None || (stateToAdd & _state) == 0) continue;
+
+        state |= _state;
+        stateCoroutines[_state].duration = duration;
+        stateCoroutines[_state].isActive = true;
+        stateCoroutines[_state].coroutine.Start();
       }
     }
+
+    public void StopState(State stateToStop)
+    {
+      foreach (State _state in Enum.GetValues(typeof(State)))
+      {
+        if (_state == State.None || (stateToStop & _state) == 0) continue;
+
+        stateCoroutines[_state].isActive = false;
+      }
+    }
+
+    public bool HasState(State _state) => (state & _state) != 0;
+
+
+    private bool CheckEndTime(State _state, float timer) =>
+      stateCoroutines[_state].duration > timer && stateCoroutines[_state].isActive;
 
     private IEnumerator SlowCoroutine()
     {
       const State thisState = State.Slow;
-      state |= thisState;
-      
+      var timer = 0f;
+
       if (!status.isSlowed)
       {
         status.isSlowed = true;
@@ -140,45 +160,60 @@ namespace Object.Entity.Fighter
         status.moveSpeed -= status.SlowedValue;
       }
 
-      yield return new WaitForSeconds(stateCoroutines[thisState].duration);
-      StopSlow();
-    }
+      while (CheckEndTime(thisState, timer))
+      {
+        yield return new WaitForEndOfFrame();
+        timer += Time.deltaTime;
+      }
 
-    private void StopSlow()
-    {
-      state &= ~State.Slow;
-      if (status.isSlowed)
-        status.moveSpeed += status.SlowedValue;
+      state &= ~thisState;
+      status.moveSpeed += status.SlowedValue;
       status.isSlowed = false;
     }
+
 
     private IEnumerator BurningCoroutine()
     {
       const State thisState = State.Burning;
-      state |= thisState;
+      var timer = 0f;
       
-      throw new NotImplementedException();
-      yield return new WaitForSeconds(stateCoroutines[thisState].duration);
-      StopBurning();
-    }
-    
-    private void StopBurning()
-    {
-      state &= ~State.Burning;
+      if (!status.isBurning)
+        burningCoroutine.Start();
+      
+      while (CheckEndTime(thisState, timer))
+      {
+        yield return new WaitForEndOfFrame();
+        timer += Time.deltaTime;
+      }
+
+      status.isBurning = false;
+      status.isFastBurning = false;
+      status.isStrongBurn = false;
+      state &= ~thisState;
     }
 
+    private IEnumerator Burning()
+    {
+      status.isBurning = true;
+      while (status.isBurning)
+      {
+        yield return new WaitForSeconds(status.burningSpeed);
+        Hit(status.burningDamage);
+      }
+    }
+    
     private IEnumerator StunCoroutine()
     {
       const State thisState = State.Stun;
-      state |= thisState;
-      
-      yield return new WaitForSeconds(stateCoroutines[thisState].duration);
-      StopStun();
-    }
+      var timer = 0f;
 
-    private void StopStun()
-    {
-      state &= ~State.Stun;
+      while (CheckEndTime(thisState, timer))
+      {
+        yield return new WaitForEndOfFrame();
+        timer += Time.deltaTime;
+      }
+      
+      state &= ~thisState;
     }
 
     #endregion
