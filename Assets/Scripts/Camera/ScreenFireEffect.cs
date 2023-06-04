@@ -28,6 +28,7 @@ namespace Camera
     private UnityEngine.Camera mainCamera => UnityEngine.Camera.main;
 
     private float tempSize;
+    private float tempAspect;
 
     [Header("Distances")]
     [SerializeField]
@@ -59,8 +60,10 @@ namespace Camera
 
     private void LateUpdate()
     {
-      if (Mathf.Approximately(tempSize, mainCamera.aspect)) return;
-      tempSize = mainCamera.aspect;
+      if (/**Mathf.Approximately(tempSize, mainCamera.orthographicSize) ||*/
+          Mathf.Approximately(tempAspect, mainCamera.aspect)) return;
+      // tempSize = mainCamera.orthographicSize;
+      tempAspect = mainCamera.aspect;
       ReSizeFires();
     }
 

@@ -1,14 +1,11 @@
-﻿using System.Collections;
-using Object.Entity.Fighter.Enemy;
-using Object.Pool;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Object.Entity.Fighter.Player {
   public class PlayerController : FighterController {
     private Rigidbody2D rigid;
+    
     private Animator anim;
-
-
+    
     public override void Attack()
     {
       throw new System.NotImplementedException();
@@ -20,12 +17,9 @@ namespace Object.Entity.Fighter.Player {
       
     }
 
-
     private void Update() {
-
       TestAttack();
     }
-    
 
     private void TestAttack() {
       if (Input.GetKeyDown(KeyCode.LeftShift)) {

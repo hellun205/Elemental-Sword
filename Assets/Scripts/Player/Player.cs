@@ -16,6 +16,9 @@ namespace Player
     private const float CloseSpeed = 9f;
     private const float OpenSpeed = 9f;
 
+    // ToDo : player interactable elements 
+    public bool interactable => true;
+
     public ElementType currentElement;
 
     private CanvasGroup selectorCanvas;
