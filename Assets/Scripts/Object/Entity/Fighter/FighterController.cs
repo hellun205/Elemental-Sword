@@ -20,7 +20,7 @@ namespace Object.Entity.Fighter
 
     public State state = State.None;
 
-    private Dictionary<State, StateCoroutiner> stateCoroutines;
+    public Dictionary<State, StateCoroutiner> stateCoroutines;
 
     private Coroutiner burningCoroutine;
 

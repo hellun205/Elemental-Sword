@@ -8,12 +8,7 @@ namespace Element
 {
   public class ElementManager : SingleTon<ElementManager>
   {
-    public delegate void ElementAttack();
-
     public delegate void PassiveAtk(FighterController attacker, FighterController target);
-
-    public const float SlowDuration = 2f;
-    public const float StunDuration = 1f;
 
     public readonly Dictionary<SingleElement, ElementInfo> elementSetting = new()
     {
@@ -65,86 +60,114 @@ namespace Element
     private static void FirePassive(FighterController attacker, FighterController target)
     {
       // Overlap Passive
+      // Todo
       const float burningDuration = 5f;
-      
+
       switch (target.damagedElement)
       {
-        default:
+        // 풀 -> 불
+        case SingleElement.Grass:
         {
+          target.status.isStrongBurn = true;
+          break;
+        }
+
+        // 물 -> 불
+        case SingleElement.Water:
+        {
+          target.StopState(State.Slow);
           break;
         }
       }
+
+      // Normal Passive
       target.AddState(State.Burning, burningDuration);
     }
 
     private static void WaterPassive(FighterController attacker, FighterController target)
     {
+      const float slowDuration = 2f;
       // Overlap Passive
+      // Todo
       // 불 -> 물
       if (target.HasState(State.Burning))
       {
         target.StopState(State.Burning);
       }
-      
+
       switch (target.damagedElement)
       {
+        // 불 -> 물
+        case SingleElement.Fire:
+        {
+          target.status.isBurning = false;
+          break;
+        }
+
         // 풀 -> 물
         case SingleElement.Grass:
         {
-          attacker.status.HealPercent(3f);
+          target.status.HealPercent(3f);
           break;
         }
-        
       }
-      target.AddState(State.Slow, SlowDuration);
+
+      // Normal Passive
+      target.AddState(State.Slow, slowDuration);
     }
 
     private static void GrassPassive(FighterController attacker, FighterController target)
     {
       // Overlap Passive
+      // Todo
       switch (target.damagedElement)
       {
-        default:
+        // 불 -> 풀
+        case SingleElement.Fire:
         {
-          
+          target.stateCoroutines[State.Burning].duration += 5f;
           break;
         }
       }
-      
+
+      // Normal Passive
       attacker.status.HealPercent(0.07f);
     }
 
     private static void LandPassive(FighterController attacker, FighterController target)
     {
       // Overlap Passive
+      // Todo
       switch (target.damagedElement)
       {
-        default:
+        // 불 -> 땅
+        case SingleElement.Fire:
         {
+          target.stateCoroutines[State.Burning].duration -= 3f;
           break;
         }
       }
+
+      // Normal Passive
+      // ToDo
     }
 
     private static void ElectricityPassive(FighterController attacker, FighterController target)
     {
+      const float stunDuration = 1f;
       // Overlap Passive
+      // Todo
       switch (target.damagedElement)
       {
-        default:
-        {
-
-
-          break;
-        }
       }
+
       // Normal Passive
       if (attacker is PlayerController)
       {
-            
+        // Todo
       }
       else
-        target.AddState(State.Stun, StunDuration);
+        target.AddState(State.Stun, stunDuration);
     }
 
     #endregion
