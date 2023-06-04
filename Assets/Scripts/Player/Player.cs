@@ -9,7 +9,7 @@ using Utils;
 
 namespace Player
 {
-  public class Player : SingleTon<Player>
+  public class Player : GameObjectSingleTon<Player>
   {
     private readonly Vector2 CloseSize = new(.1f, .1f);
     private readonly Vector2 OpenSize = new(1f, 1f);
@@ -94,12 +94,12 @@ namespace Player
 
     private void SetElement(ElementType element)
     {
-      ScreenFireEffect.instance.SetVisibility(element != ElementType.None);
+      ScreenFireEffect.Instance.SetVisibility(element != ElementType.None);
       if (element == ElementType.None) return;
 
-      var color = ElementMgr.instance.elements.Single(x => x.type == element).color;
+      var color = ElementMgr.Instance.elements.Single(x => x.type == element).color;
 
-      ScreenFireEffect.instance.ChangeColor(color);
+      ScreenFireEffect.Instance.ChangeColor(color);
     }
   }
 }

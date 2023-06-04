@@ -6,7 +6,7 @@ using UnityEngine.Pool;
 using Utils;
 
 namespace Object.Pool {
-  public class PoolManager : SingleTon<PoolManager>, IDontDestroy {
+  public class PoolManager : GameObjectSingleTon<PoolManager>, IDontDestroy {
     private Dictionary<PoolType, IObjectPool<PoolManagement>> pool;
 
     public Transform container;
@@ -41,14 +41,14 @@ namespace Object.Pool {
 
     public static PoolManagement Get(PoolType type, Vector2 position)
     {
-      instance.tempPosition = position;
-      return instance.pool[type].Get();
+      Instance.tempPosition = position;
+      return Instance.pool[type].Get();
     }
 
     public static T Get<T>(Vector2 position) where T : PoolManagement
       => (T)Get(typeof(T).GetTypeProperty<PoolType>(), position);
 
-    public static void Release(PoolManagement obj) => instance.pool[obj.type].Release(obj);
+    public static void Release(PoolManagement obj) => Instance.pool[obj.type].Release(obj);
     
   }
 }

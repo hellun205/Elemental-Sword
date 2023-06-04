@@ -1,23 +1,13 @@
-﻿using UnityEngine;
-
-namespace Manager
+﻿namespace Manager
 {
-  public class SingleTon<T> : MonoBehaviour where T : SingleTon<T>
+  public abstract class SingleTon<T> : ISingleTon<T> where T : SingleTon<T>, new()
   {
-    public static T instance { get; private set; }
+    private static T _instance;
 
-    protected virtual void Awake()
+    public static T Instance
     {
-      if (instance is null)
-        instance = (T)this;
-      else
-      {
-        Debug.LogError($"Singleton {typeof(T).Name} has multiple objects.");
-        Destroy(gameObject);
-      }
-      
-      if (this is IDontDestroy)
-        DontDestroyOnLoad(gameObject);
+      get => _instance ??= new T();
+      protected set => _instance = value;
     }
   }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Camera
 {
-  public sealed class MainCamera : SingleTon<MainCamera>
+  public sealed class MainCamera : GameObjectSingleTon<MainCamera>
   {
     private Transform target;
     

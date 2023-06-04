@@ -8,7 +8,7 @@ using Utils;
 
 namespace Camera
 {
-  public class ScreenFireEffect : SingleTon<ScreenFireEffect>, IDontDestroy
+  public class ScreenFireEffect : GameObjectSingleTon<ScreenFireEffect>, IDontDestroy
   {
     [Header("Fire Objects")]
     [SerializeField]

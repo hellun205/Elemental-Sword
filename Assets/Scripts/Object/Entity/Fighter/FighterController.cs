@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Object.Element;
+using Element;
 using UnityEngine;
 using Utils;
 
@@ -11,24 +11,31 @@ namespace Object.Entity.Fighter
   {
     public Status status;
 
-    public ElementType element;
-
-    public ElementType hitElement = ElementType.None;
-
-    public ElementData data;
-
     protected SpriteRenderer sr;
 
     private Coroutine colorCoroutine;
     private Coroutine checkHBCoroutine;
 
-    public abstract void Attack();
+    public SingleElement damagedElement;
 
+    public State state = State.None;
+
+    private Dictionary<State, StateCoroutiner> stateCoroutines;
+
+    public abstract void Attack();
 
     private void Awake()
     {
       sr = GetComponent<SpriteRenderer>();
+
+      stateCoroutines = new()
+      {
+        { State.Burning, new(new Coroutiner(this, BurningCoroutine), 0f) },
+        { State.Slow, new(new Coroutiner(this, SlowCoroutine), 0f) },
+        { State.Stun, new(new Coroutiner(this, StunCoroutine), 0f) },
+      };
     }
+
 
     public void Hit(float damage)
     {
@@ -42,6 +49,7 @@ namespace Object.Entity.Fighter
       => this.StopNStartCoroutine(ref colorCoroutine, ChangeColorSmoothCRT(color, smoothing));
 
     public void ChangeColor(Color color) => sr.color = color;
+
 
     private IEnumerator ChangeColorSmoothCRT(Color color, float smoothing)
     {
@@ -62,6 +70,7 @@ namespace Object.Entity.Fighter
       => this.StopNStartCoroutine(ref checkHBCoroutine, CheckHitBoxCRT(boxTransform, boxSize, callback, limit));
 
     public void StopCheckHitBox() => StopCoroutine(checkHBCoroutine);
+
 
     protected IEnumerator CheckHitBoxCRT
     (
@@ -103,5 +112,75 @@ namespace Object.Entity.Fighter
 
       return list.ToArray();
     }
+
+    #region State
+
+    public void AddState(State stateToAdd, float duration)
+    {
+      foreach (State _state in Enum.GetValues(typeof(State)))
+      {
+        if (_state == State.None) continue;
+        if ((stateToAdd & _state) != 0)
+        {
+          stateCoroutines[_state].duration = duration;
+          stateCoroutines[_state].coroutine.Start();
+        }
+      }
+    }
+
+    private IEnumerator SlowCoroutine()
+    {
+      const State thisState = State.Slow;
+      state |= thisState;
+      
+      if (!status.isSlowed)
+      {
+        status.isSlowed = true;
+        status.SlowedValue = status.moveSpeed * Status.SlowPercent;
+        status.moveSpeed -= status.SlowedValue;
+      }
+
+      yield return new WaitForSeconds(stateCoroutines[thisState].duration);
+      StopSlow();
+    }
+
+    private void StopSlow()
+    {
+      state &= ~State.Slow;
+      if (status.isSlowed)
+        status.moveSpeed += status.SlowedValue;
+      status.isSlowed = false;
+    }
+
+    private IEnumerator BurningCoroutine()
+    {
+      const State thisState = State.Burning;
+      state |= thisState;
+      
+      throw new NotImplementedException();
+      yield return new WaitForSeconds(stateCoroutines[thisState].duration);
+      StopBurning();
+    }
+    
+    private void StopBurning()
+    {
+      state &= ~State.Burning;
+    }
+
+    private IEnumerator StunCoroutine()
+    {
+      const State thisState = State.Stun;
+      state |= thisState;
+      
+      yield return new WaitForSeconds(stateCoroutines[thisState].duration);
+      StopStun();
+    }
+
+    private void StopStun()
+    {
+      state &= ~State.Stun;
+    }
+
+    #endregion
   }
 }

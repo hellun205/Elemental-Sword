@@ -1,6 +1,5 @@
 ﻿using System;
-using Object.Element;
-using Object.Sword;
+using UnityEngine;
 
 namespace Object.Entity.Fighter
 {
@@ -13,10 +12,30 @@ namespace Object.Entity.Fighter
 
     public float damage;
 
-    public float moveSpeed;
+    [SerializeField]
+    private float _moveSpeed;
 
-    public float jumpPower;
+    public float moveSpeed
+    {
+      get => Mathf.Max(_moveSpeed, 0);
+      set => _moveSpeed = value;
+    }
 
-    public ElementSet[] elementSetting;
+    [SerializeField]
+    private float _jumpPower;
+
+    public float jumpPower
+    {
+      get => Mathf.Max(_jumpPower, 0);
+      set => _jumpPower = value;
+    }
+
+    public const float SlowPercent = 0.3f;
+
+    [HideInInspector]
+    public bool isSlowed;
+
+    [HideInInspector]
+    public float SlowedValue;
   }
 }
