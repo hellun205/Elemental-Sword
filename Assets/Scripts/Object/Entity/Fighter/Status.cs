@@ -56,5 +56,7 @@ namespace Object.Entity.Fighter
     public float burningDamage => maxHp * (isStrongBurn ? 0.09f : 0.05f);
 
     public void Heal(float amount) => hp = Mathf.Min(maxHp, hp + Mathf.Abs(amount));
+    
+    public void HealPercent(float percent) => hp = Mathf.Min(maxHp, hp + (maxHp * percent));
   }
 }

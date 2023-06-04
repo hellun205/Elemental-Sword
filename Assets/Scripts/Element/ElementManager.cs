@@ -56,8 +56,15 @@ namespace Element
 
     #region Passive Attacks
 
+    public void ApplyPassive(FighterController attacker, FighterController target, SingleElement element)
+    {
+      elementSetting[element].passive.Invoke(attacker, target);
+      target.damagedElement = element;
+    }
+
     private static void FirePassive(FighterController attacker, FighterController target)
     {
+      // Overlap Passive
       const float burningDuration = 5f;
       
       switch (target.damagedElement)
@@ -72,6 +79,7 @@ namespace Element
 
     private static void WaterPassive(FighterController attacker, FighterController target)
     {
+      // Overlap Passive
       // 불 -> 물
       if (target.HasState(State.Burning))
       {
@@ -83,7 +91,7 @@ namespace Element
         // 풀 -> 물
         case SingleElement.Grass:
         {
-          target.status.Heal();
+          attacker.status.HealPercent(3f);
           break;
         }
         
@@ -93,6 +101,7 @@ namespace Element
 
     private static void GrassPassive(FighterController attacker, FighterController target)
     {
+      // Overlap Passive
       switch (target.damagedElement)
       {
         default:
@@ -101,10 +110,13 @@ namespace Element
           break;
         }
       }
+      
+      attacker.status.HealPercent(0.07f);
     }
 
     private static void LandPassive(FighterController attacker, FighterController target)
     {
+      // Overlap Passive
       switch (target.damagedElement)
       {
         default:
@@ -116,6 +128,7 @@ namespace Element
 
     private static void ElectricityPassive(FighterController attacker, FighterController target)
     {
+      // Overlap Passive
       switch (target.damagedElement)
       {
         default:
@@ -125,6 +138,7 @@ namespace Element
           break;
         }
       }
+      // Normal Passive
       if (attacker is PlayerController)
       {
             

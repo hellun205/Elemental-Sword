@@ -1,6 +1,5 @@
-﻿using Animation;
-using Animation.Combined;
-using Object.Element;
+﻿using Animation.Combined;
+using Element;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,7 +10,7 @@ namespace Player
   [RequireComponent(typeof(Image))]
   public class ElementSelector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
   {
-    public static ElementType SelectedElement { get; private set; }
+    public static SingleElement SelectedElement { get; private set; }
 
     private readonly Vector2 EnterSize = new(1.4f, 1.4f);
 
@@ -29,7 +28,7 @@ namespace Player
     private Image img;
 
     [SerializeField]
-    private ElementType element;
+    private SingleElement element;
 
     // Animations
     private SmoothSizeAndFade anim;
@@ -68,7 +67,7 @@ namespace Player
     public void OnPointerExit(PointerEventData eventData)
     {
       anim.Hide();
-      SelectedElement = ElementType.None;
+      SelectedElement = SingleElement.None;
     }
   }
 }

@@ -39,7 +39,8 @@ namespace Object.Entity.Fighter
 
       burningCoroutine = new(this, Burning);
     }
-
+    
+    // Todo: on release -> stop all coroutine.
 
     public void Hit(float damage)
     {

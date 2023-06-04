@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using Animation.Preset;
+﻿using Animation.Preset;
 using Camera;
+using Element;
 using Manager;
-using Object.Element;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
@@ -19,7 +18,8 @@ namespace Player
     // ToDo : player interactable elements 
     public bool interactable => true;
 
-    public ElementType currentElement;
+    public SingleElement
+      currentElement;
 
     private CanvasGroup selectorCanvas;
 
@@ -76,7 +76,7 @@ namespace Player
       {
         isActive = true;
         elementContainer.transform.position = mainCamera.WorldToScreenPoint(player.transform.position);
-        UnityEngine.InputSystem.Mouse.current.WarpCursorPosition(player.transform.position.WorldToScreenPoint());
+        Utility.SetCursorPosToObject(player.transform);
         anim.Show();
       }
     }
@@ -92,12 +92,12 @@ namespace Player
       }
     }
 
-    private void SetElement(ElementType element)
+    private void SetElement(SingleElement element)
     {
-      ScreenFireEffect.Instance.SetVisibility(element != ElementType.None);
-      if (element == ElementType.None) return;
+      ScreenFireEffect.Instance.SetVisibility(element != SingleElement.None);
+      if (element == SingleElement.None) return;
 
-      var color = ElementMgr.Instance.elements.Single(x => x.type == element).color;
+      var color = Managers.Element.elementSetting[element].color;
 
       ScreenFireEffect.Instance.ChangeColor(color);
     }
