@@ -18,7 +18,11 @@ namespace Object.Entity.Fighter
     public float moveSpeed
     {
       get => Mathf.Max(_moveSpeed, 0);
-      set => _moveSpeed = value;
+      set
+      {
+        _moveSpeed = value;
+        movement.moveSpeed = value;
+      }
     }
 
     [SerializeField]
@@ -27,30 +31,36 @@ namespace Object.Entity.Fighter
     public float jumpPower
     {
       get => Mathf.Max(_jumpPower, 0);
-      set => _jumpPower = value;
+      set
+      {
+        _jumpPower = value;
+        movement.jumpPower = value;
+      }
     }
+
+    public Movement movement;
 
     public const float SlowPercent = 0.3f;
 
-    [HideInInspector]
+    [NonSerialized]
     public bool isSlowed;
 
-    [HideInInspector]
+    [NonSerialized]
     public float SlowedValue;
 
     public const float BurningSpeed = 0.6f;
     
     public const float FastBurningSpeed = 0.35f;
 
-    [HideInInspector]
+    [NonSerialized]
     public bool isBurning;
     
-    [HideInInspector]
+    [NonSerialized]
     public bool isFastBurning;
 
     public float burningSpeed => isFastBurning ? FastBurningSpeed : BurningSpeed;
     
-    [HideInInspector]
+    [NonSerialized]
     public bool isStrongBurn;
 
     public float burningDamage => maxHp * (isStrongBurn ? 0.09f : 0.05f);

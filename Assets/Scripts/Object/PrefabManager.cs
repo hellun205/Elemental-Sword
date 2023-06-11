@@ -7,6 +7,6 @@ namespace Object {
   public class PrefabManager : GameObjectSingleTon<PrefabManager>, IDontDestroy {
     public List<GameObject> prefabs;
 
-    public static GameObject Get(string name) => Instance.prefabs.Single(obj => obj.name == name);
+    public GameObject Get(string name) => prefabs.Single(obj => obj.name == name);
   }
 }

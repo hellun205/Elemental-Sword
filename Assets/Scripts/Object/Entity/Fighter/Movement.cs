@@ -5,6 +5,9 @@ namespace Object.Entity.Fighter
 {
   public class Movement : MonoBehaviour
   {
+    [SerializeField]
+    protected FighterController controller;
+
     protected new Rigidbody2D rigidbody;
 
     [Header("Movement - basic")]
@@ -25,6 +28,7 @@ namespace Object.Entity.Fighter
     };
 
     public float moveSpeed = 1f;
+
     public float jumpPower = 3f;
 
     [HideInInspector]
@@ -42,6 +46,8 @@ namespace Object.Entity.Fighter
 
     private float checkDistanceY;
 
+    public bool isCheckGround = true;
+
     [Header("Animation Parameters")]
     [SerializeField]
     private string walkingAnim;
@@ -58,6 +64,7 @@ namespace Object.Entity.Fighter
 
       rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
 
+      if (!isCheckGround) return;
       var bounds = collider.bounds;
       checkDistanceX = bounds.extents.x;
       checkDistanceY = bounds.extents.y + 0.1f;
@@ -65,6 +72,8 @@ namespace Object.Entity.Fighter
 
     protected virtual void FixedUpdate()
     {
+      if (controller.HasState(State.Stun))
+        return;
       transform.Translate(direction * moveSpeed * Time.fixedDeltaTime, 0f, 0f);
     }
 
@@ -77,19 +86,21 @@ namespace Object.Entity.Fighter
 
     protected virtual void Jump()
     {
-      if (!canJump)
+      if (!canJump || controller.HasState(State.Stun))
         return;
 
       SetJump(true);
       rigidbody.velocity = Vector2.up * jumpPower;
     }
 
-    protected void Move(float amount) => direction = amount;
+    public void Move(float amount) => direction = amount;
 
-    protected void Move(Direction dir) => direction = (float) dir;
+    public void Move(Direction dir) => direction = (float) dir;
 
     protected void CheckGround()
     {
+      if (!isCheckGround) return;
+      
       const float distance = 0.3f;
       var pos = GetColliderCenter();
       var leftVector = new Vector2(pos.x - checkDistanceX, pos.y - checkDistanceY);

@@ -1,20 +1,25 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Animation;
 using Element;
+using Manager;
+using Object.Pool;
 using UnityEngine;
 using Utils;
 
 namespace Object.Entity.Fighter
 {
-  public abstract class FighterController : MonoBehaviour
+  public abstract class FighterController : PoolManagement
   {
     public Status status;
 
+    [SerializeField]
     protected SpriteRenderer sr;
 
-    private Coroutine colorCoroutine;
-    private Coroutine checkHBCoroutine;
+    private SmoothColor colorAnim;
+    private Coroutiner checkHbCoroutiner;
+    private Rigidbody2D rb;
 
     public SingleElement damagedElement;
 
@@ -26,9 +31,10 @@ namespace Object.Entity.Fighter
 
     public abstract void Attack();
 
-    private void Awake()
+    protected virtual void Awake()
     {
-      sr = GetComponent<SpriteRenderer>();
+      // sr = GetComponent<SpriteRenderer>();
+      rb = GetComponent<Rigidbody2D>();
 
       stateCoroutines = new()
       {
@@ -36,50 +42,42 @@ namespace Object.Entity.Fighter
         { State.Slow, new(new Coroutiner(this, SlowCoroutine), 0f) },
         { State.Stun, new(new Coroutiner(this, StunCoroutine), 0f) },
       };
-
       burningCoroutine = new(this, Burning);
+
+      colorAnim = new(this, new(() => sr.color, value => sr.color = value));
     }
-    
+
     // Todo: on release -> stop all coroutine.
 
-    public void Hit(float damage)
+    public virtual void Hit(float damage)
     {
       status.hp -= damage;
-      var tmpColor = sr.color;
-      ChangeColor(Color.red);
-      ChangeColorSmooth(tmpColor, 3f);
+      colorAnim.Start(Color.red, Color.white, 3f);
     }
-
-    public void ChangeColorSmooth(Color color, float smoothing = 3f)
-      => this.StopNStartCoroutine(ref colorCoroutine, ChangeColorSmoothCRT(color, smoothing));
-
-    public void ChangeColor(Color color) => sr.color = color;
-
-
-    private IEnumerator ChangeColorSmoothCRT(Color color, float smoothing)
+    
+    public virtual void Hit(float damage, SingleElement element, FighterController attacker, bool knockBack = false)
     {
-      while (sr.color != color)
-      {
-        sr.color = Color.Lerp(sr.color, color, Time.deltaTime * smoothing);
-        yield return new WaitForEndOfFrame();
-      }
+      Hit(damage);
+      Managers.Element.ApplyPassive(attacker, this, element);
+      if (knockBack)
+        rb.AddForce((position.x < attacker.position.x ? Vector2.left : Vector2.right) * 300f);
     }
 
     public void CheckHitBoxRepeat
     (
-      Transform boxTransform,
+      Vector2 boxPos,
       Vector2 boxSize,
       Action<FighterController> callback,
       byte limit
     )
-      => this.StopNStartCoroutine(ref checkHBCoroutine, CheckHitBoxCRT(boxTransform, boxSize, callback, limit));
-
-    public void StopCheckHitBox() => StopCoroutine(checkHBCoroutine);
-
+    {
+      checkHbCoroutiner = new(this, () => CheckHitBoxCRT(boxPos, boxSize, callback, limit));
+      checkHbCoroutiner.Start();
+    }
 
     protected IEnumerator CheckHitBoxCRT
     (
-      Transform boxTransform,
+      Vector2 boxPos,
       Vector2 boxSize,
       Action<FighterController> callback,
       byte limit
@@ -89,7 +87,7 @@ namespace Object.Entity.Fighter
       while (list.Count < limit)
       {
         yield return new WaitForEndOfFrame();
-        var colliders = Physics2D.OverlapBoxAll(boxTransform.position, boxSize, 0);
+        var colliders = Physics2D.OverlapBoxAll(boxPos, boxSize, 0);
 
         foreach (var target in colliders)
         {
@@ -112,11 +110,44 @@ namespace Object.Entity.Fighter
       {
         if (target.TryGetComponent(out FighterController component) && component != this)
           list.Add(component);
-        if (list.Count <= limit) break;
+        if (list.Count >= limit) break;
       }
 
       return list.ToArray();
     }
+
+    protected void AttackBox
+    (
+      float damage,
+      SingleElement element,
+      Transform pos,
+      Vector2 boxPos,
+      Vector2 boxSize,
+      byte limit = byte.MaxValue
+    )
+    {
+      var hits = CheckHitBox((Vector2) pos.position + boxPos, boxSize, limit);
+      foreach (var hit in hits)
+      {
+        hit.Hit(damage);
+        Managers.Element.ApplyPassive(this, hit, element);
+      }
+    }
+
+    protected void AttackBoxRepeat
+    (
+      float damage,
+      SingleElement element,
+      Transform pos,
+      Vector2 boxPos,
+      Vector2 boxSize,
+      byte limit = byte.MaxValue
+    )
+      => CheckHitBoxRepeat((Vector2) pos.position + boxPos, boxSize, opponent =>
+      {
+        opponent.Hit(damage);
+        Managers.Element.ApplyPassive(this, opponent, element);
+      }, limit);
 
     #region State
 
@@ -177,10 +208,10 @@ namespace Object.Entity.Fighter
     {
       const State thisState = State.Burning;
       var timer = 0f;
-      
+
       if (!status.isBurning)
         burningCoroutine.Start();
-      
+
       while (CheckEndTime(thisState, timer))
       {
         yield return new WaitForEndOfFrame();
@@ -202,7 +233,7 @@ namespace Object.Entity.Fighter
         Hit(status.burningDamage);
       }
     }
-    
+
     private IEnumerator StunCoroutine()
     {
       const State thisState = State.Stun;
@@ -213,7 +244,7 @@ namespace Object.Entity.Fighter
         yield return new WaitForEndOfFrame();
         timer += Time.deltaTime;
       }
-      
+
       state &= ~thisState;
     }
 

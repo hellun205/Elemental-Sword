@@ -1,12 +1,19 @@
-﻿using UnityEngine;
+﻿using Element;
+using UnityEngine;
 
 namespace Object.Entity.Fighter.Enemy
 {
-  public class EnemyController : FighterController
+  public abstract class EnemyController : FighterController
   {
-    public override void Attack()
+    public SingleElement element;
+    
+    [SerializeField]
+    protected Movement movement;
+
+    protected override void Awake()
     {
-      throw new System.NotImplementedException();
+      base.Awake();
+      
     }
   }
 }

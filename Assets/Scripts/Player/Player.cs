@@ -76,8 +76,8 @@ namespace Player
       {
         isActive = true;
         elementContainer.transform.position = mainCamera.WorldToScreenPoint(player.transform.position);
-        Utility.SetCursorPosToObject(player.transform);
         anim.Show();
+        Utility.SetCursorPosToObject(player.transform);
       }
     }
 

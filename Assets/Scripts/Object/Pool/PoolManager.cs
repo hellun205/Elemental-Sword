@@ -1,54 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Manager;
 using UnityEngine;
 using UnityEngine.Pool;
-using Utils;
 
-namespace Object.Pool {
-  public class PoolManager : GameObjectSingleTon<PoolManager>, IDontDestroy {
-    private Dictionary<PoolType, IObjectPool<PoolManagement>> pool;
+namespace Object.Pool
+{
+  public abstract class PoolManager<T, TObject> : GameObjectSingleTon<T> 
+    where T : PoolManager<T, TObject>
+    where TObject : PoolManagement
+  {
+    public delegate void PoolEventListener(TObject sender);
 
-    public Transform container;
+    public event Action onGetBefore;
+    public event PoolEventListener onGetAfter;
+    public event PoolEventListener onReleaseBefore;
+    public event Action onReleaseAfter;
 
-    private Vector2 tempPosition;
+    protected Dictionary<string, IObjectPool<TObject>> pools = new Dictionary<string, IObjectPool<TObject>>();
 
-    protected override void Awake() {
-      base.Awake();
-      pool = new Dictionary<PoolType, IObjectPool<PoolManagement>>();
+    protected Transform parent;
 
-      foreach (PoolType type in Enum.GetValues(typeof(PoolType))) {
-        pool.Add(type,
-          new ObjectPool<PoolManagement>(() => OnCreatePool(type), OnGetPool, OnReleasePool, OnDestroyPool));
-      }
-    }
-
-    private PoolManagement OnCreatePool(PoolType type) {
-      var prefab = PrefabManager.Get(type.ToString());
-      var obj = Instantiate(prefab, container).GetComponent<PoolManagement>();
-      return obj;
-    }
-
-    private void OnGetPool(PoolManagement obj)
+    public TComponent Get<TComponent>([CanBeNull] Action<TComponent> objSet = null) where TComponent : Component
     {
-      obj.position = tempPosition;
+      var type = typeof(TComponent).Name;
+      if (!pools.ContainsKey(type))
+      {
+        pools.Add(type, new ObjectPool<TObject>(() => OnCreatePool(type), OnGetPool, OnReleasePool, OnDestroyPool));
+      }
+
+      onGetBefore?.Invoke();
+      var obj = pools[type].Get();
+      var objT = obj as TComponent;
+      objSet?.Invoke(objT);
+      onGetAfter?.Invoke(obj);
+      return objT;
+    }
+
+    public void Release<T>(T obj) where T : Component
+    {
+      var type = typeof(T).Name;
+      if (!pools.ContainsKey(type))
+      {
+        Debug.LogError($"Can't release object. This is not managed by this manager.");
+        return;
+      }
+
+      var objT = obj as TObject;
+      onReleaseBefore?.Invoke(objT);
+      pools[type].Release(objT);
+      onReleaseAfter?.Invoke();
+    }
+
+    protected virtual TObject OnCreatePool(string type) =>
+      Instantiate(Managers.Prefab.Get(type).GetComponent<TObject>(), parent);
+
+    protected virtual void OnGetPool(TObject obj) {
+      obj.OnGet();
       obj.gameObject.SetActive(true);
     }
 
-    private void OnReleasePool(PoolManagement obj) => obj.gameObject.SetActive(false);
-
-    private void OnDestroyPool(PoolManagement obj) => Destroy(obj.gameObject);
-
-    public static PoolManagement Get(PoolType type, Vector2 position)
+    protected virtual void OnReleasePool(TObject obj)
     {
-      Instance.tempPosition = position;
-      return Instance.pool[type].Get();
+      obj.OnReleased();
+      obj.gameObject.SetActive(false);
     }
 
-    public static T Get<T>(Vector2 position) where T : PoolManagement
-      => (T)Get(typeof(T).GetTypeProperty<PoolType>(), position);
-
-    public static void Release(PoolManagement obj) => Instance.pool[obj.type].Release(obj);
-    
+    protected virtual void OnDestroyPool(TObject obj) => Destroy(obj.gameObject);
   }
 }

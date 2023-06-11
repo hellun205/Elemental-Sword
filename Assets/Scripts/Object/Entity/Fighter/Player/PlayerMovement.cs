@@ -10,8 +10,6 @@ namespace Object.Entity.Fighter.Player
     private float curInputCooldown;
 
     private Status status => controller.status;
-    
-    private PlayerController controller;
 
     private global::Player.Player player;
 
@@ -19,7 +17,7 @@ namespace Object.Entity.Fighter.Player
     {
       base.Awake();
       animator = GetComponent<Animator>();
-      controller = GetComponent<PlayerController>();
+      // controller = GetComponent<PlayerController>();
       player = FindObjectOfType<global::Player.Player>();
       
       curInputCooldown = inputCooldown;
