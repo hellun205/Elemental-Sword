@@ -32,7 +32,10 @@ namespace Object.Entity.Fighter.Enemy.Elec
     private bool isAttacking;
 
     [SerializeField]
-    private float attackSpeed = .7f;
+    private float attackSpeed = .2f;
+    
+    [SerializeField]
+    private float attackCooldown = 2f;
 
     private bool isFollowing = false;
 
@@ -50,6 +53,11 @@ namespace Object.Entity.Fighter.Enemy.Elec
 
     private void Update()
     {
+      if (status.hp < status.maxHp * 0.3f)
+        attackCooldown = 0.7f;  
+      else if (status.hp < status.maxHp * 0.6f)
+        attackCooldown = 1f;
+      
       if (!isFollowing) return;
       var c = Physics2D.OverlapCircleAll(transform.position, followCollider.radius, LayerMask.GetMask("Player"));
       if (c.Length == 0)
@@ -81,7 +89,7 @@ namespace Object.Entity.Fighter.Enemy.Elec
       while (true)
       {
         yield return new WaitUntil(() => !isAttacking);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(attackCooldown);
         Attack();
       }
     }

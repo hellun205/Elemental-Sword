@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Element;
+using Manager;
 using UnityEngine;
 using Utils;
 
@@ -15,9 +16,12 @@ namespace Object.Entity.Fighter.Player
 
     private Animator anim;
 
+    [SerializeField]
+    private BoxCollider2D atkBound;
+
     public override void Attack()
     {
-      throw new System.NotImplementedException();
+      AttackBox(status.damage, Managers.PlayerM.currentElement, transform, atkBound.offset, atkBound.size);
     }
 
     protected override void Awake()
@@ -30,15 +34,8 @@ namespace Object.Entity.Fighter.Player
 
     private void Update()
     {
-      TestAttack();
-    }
-
-    private void TestAttack()
-    {
-      if (Input.GetKeyDown(KeyCode.LeftShift))
-      {
-        anim.SetTrigger("attack");
-      }
+      if (Input.GetMouseButtonDown(0))
+        Attack();
     }
 
     public override void Hit(float damage)

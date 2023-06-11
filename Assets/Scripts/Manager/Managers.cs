@@ -12,6 +12,7 @@ namespace Manager
     public static ElementManager Element { get; private set; }
     public static PrefabManager Prefab { get; private set; }
     public static PlayerController Player { get; private set; }
+    public static Player.Player PlayerM { get; private set; }
     
     protected override void Awake()
     {
@@ -20,6 +21,7 @@ namespace Manager
       Element = ElementManager.Instance;
       Prefab = FindObjectOfType<PrefabManager>();
       Player = FindObjectOfType<PlayerController>();
+      PlayerM = FindObjectOfType<Player.Player>();
     }
   }
 }
