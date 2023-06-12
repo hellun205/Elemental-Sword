@@ -10,7 +10,7 @@ using Utils;
 
 namespace Object.Entity.Fighter
 {
-  public abstract class FighterController : PoolManagement
+  public abstract class FighterController : Entity
   {
     public Status status;
 
@@ -31,10 +31,14 @@ namespace Object.Entity.Fighter
 
     public abstract void Attack();
 
-    protected virtual void Awake()
+    private HpBar hpBar;
+
+    protected override void Awake()
     {
+      base.Awake();
       // sr = GetComponent<SpriteRenderer>();
       rb = GetComponent<Rigidbody2D>();
+      hpBar = GetComponent<HpBar>();
 
       stateCoroutines = new()
       {
@@ -52,6 +56,8 @@ namespace Object.Entity.Fighter
     public virtual void Hit(float damage)
     {
       status.hp -= damage;
+      hpBar.curHp = status.hp;
+      hpBar.maxHp = status.maxHp;
       colorAnim.Start(Color.red, Color.white, 3f);
     }
 
@@ -112,7 +118,7 @@ namespace Object.Entity.Fighter
       var list = new List<FighterController>();
       foreach (var target in colliders)
       {
-        if (target.TryGetComponent(out FighterController component) && component != this)
+        if (target.TryGetComponent(out FighterController component) && component != this && !target.isTrigger)
           list.Add(component);
         if (list.Count >= limit) break;
       }

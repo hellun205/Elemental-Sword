@@ -1,7 +1,10 @@
-﻿using Animation.Preset;
+﻿using System;
+using Animation.Preset;
 using Camera;
 using Element;
 using Manager;
+using Object.Entity;
+using Object.Entity.Fighter.Enemy.Elec;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
@@ -54,6 +57,11 @@ namespace Player
           sizeShowAnimSpeed = OpenSpeed,
         }
       };
+    }
+
+    private void Start()
+    {
+      Managers.Entity.Get<LightningElemental>(Vector2.zero);
     }
 
     private void Update()

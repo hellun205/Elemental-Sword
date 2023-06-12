@@ -1,12 +1,15 @@
 ﻿using System;
+using Manager;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace Object.Pool {
   public abstract class PoolManagement: MonoBehaviour
   {
-    [NonSerialized]
-    public string type;
+    public string type { get; set; }
     
+    public IObjectPool<PoolManagement> pool { get; set; }
+
     public virtual Vector2 position {
       get => transform.position;
       set => transform.position = value;
@@ -21,5 +24,7 @@ namespace Object.Pool {
     {
       
     }
+
+    public void Release() => pool.Release(this);
   }
 }

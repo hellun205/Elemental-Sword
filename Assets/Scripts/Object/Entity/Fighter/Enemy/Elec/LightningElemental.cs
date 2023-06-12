@@ -54,7 +54,7 @@ namespace Object.Entity.Fighter.Enemy.Elec
       colPos = atkCollider.offset;
       colSize = atkCollider.size;
 
-      darkCloud.transform.parent = null;
+      darkCloud.transform.parent = Entity.container;
     }
 
     private void Update()
@@ -101,10 +101,17 @@ namespace Object.Entity.Fighter.Enemy.Elec
       }
     }
 
+    public override void OnGet()
+    {
+      base.OnGet();
+      darkCloud.SetActive(true);
+    }
+
     public override void OnReleased()
     {
       base.OnReleased();
       attackLoopCoroutiner.Stop();
+      darkCloud.SetActive(false);
     }
 
     private void OnDrawGizmos()
