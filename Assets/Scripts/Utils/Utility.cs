@@ -42,7 +42,7 @@ namespace Utils
     public static T Random<T>(this IEnumerable<T> enumerable)
     {
       var enumerable1 = enumerable as T[] ?? enumerable.ToArray();
-      return enumerable1[UnityEngine.Random.Range(0, enumerable1.Count())];
+      return enumerable1[UnityEngine.Random.Range(0, enumerable1.Length)];
     }
 
     public static bool IsEqual(this Color a, Color b) =>

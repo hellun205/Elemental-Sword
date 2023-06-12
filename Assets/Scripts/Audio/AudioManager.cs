@@ -10,13 +10,14 @@ namespace Audio
     private GameObject sfxGO;
 
     private GameObject bgmGO;
-    
+
     private List<AudioSource> sfxPlayer = new List<AudioSource>();
 
     private AudioSource bgmPlayer;
-    
+
     private float bgmVol = 1f;
     private float sfxVol = 1f;
+
     public float BGMVolume
     {
       get => bgmVol;
@@ -49,8 +50,14 @@ namespace Audio
         bgmGO = GameObject.Find("@BGM");
         if (bgmGO is null)
         {
-          bgmGO = new GameObject();
-          bgmGO.transform.SetParent(gameObject.transform);
+          bgmGO = new GameObject()
+          {
+            transform =
+            {
+              parent = gameObject.transform
+            },
+            name = "@BGM"
+          };
         }
       }
 
@@ -59,8 +66,14 @@ namespace Audio
         sfxGO = GameObject.Find("@SFX");
         if (sfxGO is null)
         {
-          sfxGO = new GameObject();
-          sfxGO.transform.SetParent(gameObject.transform);
+          sfxGO = new GameObject()
+          {
+            transform =
+            {
+              parent = gameObject.transform
+            },
+            name = "@SFX"
+          };
         }
       }
 
@@ -79,7 +92,7 @@ namespace Audio
       else
         Debug.LogError($"Can't find BGM audio data: {bgmName}.");
     }
-    
+
     public void PlaySFX(string sfxName)
     {
       var sound = sfxDatas.SingleOrDefault(data => data.name == sfxName);

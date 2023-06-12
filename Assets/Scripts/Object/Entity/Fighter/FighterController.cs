@@ -40,7 +40,7 @@ namespace Object.Entity.Fighter
       {
         { State.Burning, new(new Coroutiner(this, BurningCoroutine), 0f) },
         { State.Slow, new(new Coroutiner(this, SlowCoroutine), 0f) },
-        { State.Stun, new(new Coroutiner(this, StunCoroutine), 0f) },
+        { State.Stun, new(new Coroutiner(this, StunCoroutine), 5f) },
       };
       burningCoroutine = new(this, Burning);
 
@@ -54,7 +54,7 @@ namespace Object.Entity.Fighter
       status.hp -= damage;
       colorAnim.Start(Color.red, Color.white, 3f);
     }
-    
+
     public virtual void Hit(float damage, SingleElement element, FighterController attacker, bool knockBack = false)
     {
       Hit(damage);
@@ -91,9 +91,13 @@ namespace Object.Entity.Fighter
 
         foreach (var target in colliders)
         {
-          if (target.TryGetComponent(out FighterController component) &&
-              !list.Contains(component) &&
-              component != this)
+          if
+          (
+            target.TryGetComponent(out FighterController component) &&
+            !list.Contains(component) &&
+            component != this &&
+            !target.isTrigger
+          )
           {
             list.Add(component);
             callback.Invoke(component);
@@ -175,7 +179,6 @@ namespace Object.Entity.Fighter
     }
 
     public bool HasState(State _state) => (state & _state) != 0;
-
 
     private bool CheckEndTime(State _state, float timer) =>
       stateCoroutines[_state].duration > timer && stateCoroutines[_state].isActive;

@@ -39,6 +39,12 @@ namespace Object.Entity.Fighter.Enemy.Elec
 
     private bool isFollowing = false;
 
+    [SerializeField]
+    private string[] atkAudios;
+
+    [SerializeField]
+    private float cloudDistance = 4f;
+
     protected override void Awake()
     {
       base.Awake();
@@ -54,7 +60,7 @@ namespace Object.Entity.Fighter.Enemy.Elec
     private void Update()
     {
       if (status.hp < status.maxHp * 0.3f)
-        attackCooldown = 0.7f;  
+        attackCooldown = 0.85f;  
       else if (status.hp < status.maxHp * 0.6f)
         attackCooldown = 1f;
       
@@ -74,11 +80,12 @@ namespace Object.Entity.Fighter.Enemy.Elec
     private IEnumerator AtkCRT()
     {
       isAttacking = true;
-      var pos = Managers.Player.position.Plus(y: 2f);
+      var pos = Managers.Player.position.Plus(y: cloudDistance);
       darkCloud.transform.position = pos;
       cloudAnimator.SetTrigger("start");
       yield return new WaitForSeconds(attackSpeed);
       cloudAnimator.SetTrigger("attack");
+      Managers.Audio.PlaySFX(atkAudios.Random());
       yield return new WaitForSeconds(0.1f);
       AttackBox(status.damage, element, darkCloud.transform, colPos, colSize);
       isAttacking = false;
