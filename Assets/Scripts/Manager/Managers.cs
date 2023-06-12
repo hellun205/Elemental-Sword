@@ -1,4 +1,5 @@
-﻿using Element;
+﻿using Audio;
+using Element;
 using Object;
 using Object.Entity.Fighter.Player;
 using Player;
@@ -13,6 +14,7 @@ namespace Manager
     public static PrefabManager Prefab { get; private set; }
     public static PlayerController Player { get; private set; }
     public static Player.Player PlayerM { get; private set; }
+    public static AudioManager Audio { get; private set; }
     
     protected override void Awake()
     {
@@ -22,6 +24,7 @@ namespace Manager
       Prefab = FindObjectOfType<PrefabManager>();
       Player = FindObjectOfType<PlayerController>();
       PlayerM = FindObjectOfType<Player.Player>();
+      Audio = FindObjectOfType<AudioManager>();
     }
   }
 }
