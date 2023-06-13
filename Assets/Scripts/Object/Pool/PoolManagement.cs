@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 
 namespace Object.Pool {
+  [DisallowMultipleComponent]
   public abstract class PoolManagement: MonoBehaviour
   {
     public string type { get; set; }

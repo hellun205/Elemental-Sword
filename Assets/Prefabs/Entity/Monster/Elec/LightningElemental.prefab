@@ -634,6 +634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d800df61bd12467eb7deb1a0e54886c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entity: {fileID: 4880716438866037422}
   curHp: 0
   maxHp: 0
   col: {fileID: 4880716438866037423}

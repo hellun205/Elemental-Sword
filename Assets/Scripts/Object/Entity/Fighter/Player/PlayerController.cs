@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Element;
 using Manager;
 using UnityEngine;
@@ -30,6 +31,13 @@ namespace Object.Entity.Fighter.Player
       rigid = GetComponent<Rigidbody2D>();
       anim = GetComponent<Animator>();
       hitCoroutiner = new Coroutiner(this, HitCRT);
+    }
+
+    private void Start()
+    {
+      hpBar.maxHp = status.maxHp;
+      hpBar.curHp = status.hp;
+      hpBar.Init();
     }
 
     private void Update()

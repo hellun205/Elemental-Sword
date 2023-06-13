@@ -1,14 +1,12 @@
 ﻿using Animation;
-using Object.Entity;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Entity.UI
+namespace Object.Entity
 {
   public class UEHpBar : UIEntity
   {
-    private const float middleFollowSpeed = 4f;
+    private const float MiddleFollowSpeed = 4f;
 
     private SmoothFloat animMiddle;
 
@@ -18,28 +16,27 @@ namespace Entity.UI
     [SerializeField]
     private Image middleImg;
 
-    private float _value;
-    private float _maxValue;
-    private bool _showText;
+    private float value;
+    private float maxValue;
 
-    public float value
+    public float Value
     {
-      get => _value;
+      get => value;
       set
       {
-        _value = value;
-        topImg.fillAmount = _value / maxValue;
-        animMiddle.Start(middleImg.fillAmount, topImg.fillAmount, middleFollowSpeed);
+        this.value = value;
+        topImg.fillAmount = this.value / MaxValue;
+        animMiddle.Start(middleImg.fillAmount, topImg.fillAmount, MiddleFollowSpeed);
       }
     }
 
-    public float maxValue
+    public float MaxValue
     {
-      get => _maxValue;
+      get => maxValue;
       set
       {
-        _maxValue = value;
-        this.value = this.value;
+        maxValue = value;
+        this.Value = this.Value;
       }
     }
 
@@ -51,8 +48,8 @@ namespace Entity.UI
 
     public void Init(float value, float maxValue)
     {
-      this.value = value;
-      this.maxValue = maxValue;
+      Value = value;
+      MaxValue = maxValue;
     }
   }
 }

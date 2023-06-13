@@ -1,4 +1,4 @@
-﻿using Entity.UI;
+﻿using System;
 using Manager;
 using Object.Pool;
 using UnityEngine;
@@ -7,7 +7,9 @@ namespace Object.Entity
 {
   public class HpBar : MonoBehaviour
   {
+    [SerializeField]
     private Entity entity;
+
     private UEHpBar hpBar;
 
     public float curHp;
@@ -21,6 +23,11 @@ namespace Object.Entity
 
     private float colDistance;
 
+    private void Reset()
+    {
+      entity = GetComponent<Entity>();
+    }
+
     private Vector2 GetPos() => new Vector2(
       entity.position.x,
       entity.position.y + colDistance + distance
@@ -28,42 +35,29 @@ namespace Object.Entity
 
     private void Awake()
     {
-      entity = GetComponent<Entity>();
       colDistance = col.bounds.extents.y;
-      // EntityManager.Instance.onGetEntityAfter += OnGetEntityEntity;
-      // EntityManager.Instance.onReleaseEntityBefore += OnReleasedEntity;
-      EntityManager.Instance.onGetAfter += OnGetEntityEntity;
-      EntityManager.Instance.onReleaseBefore += OnReleasedEntity;
     }
 
     private void Update()
     {
       hpBar.position = GetPos();
-      hpBar.maxValue = maxHp;
-      hpBar.value = curHp;
+      hpBar.MaxValue = maxHp;
+      hpBar.Value = curHp;
     }
 
-    public void OnGetEntityEntity(Entity entity)
+    public void Init()
     {
-      if (entity == this.entity)
-        LoadHpBar();
+      LoadHpBar();
     }
 
-    public void OnReleasedEntity(Entity entity)
+    public void Release()
     {
-      if (entity == this.entity)
-        hpBar.Release();
+      hpBar.Release();
     }
 
     public void LoadHpBar()
     {
       hpBar = Managers.Entity.Get<UEHpBar>(GetPos(), x => x.Init(curHp, maxHp));
-    }
-
-    private void OnDestroy()
-    {
-      EntityManager.Instance.onGetAfter -= OnGetEntityEntity;
-      EntityManager.Instance.onReleaseBefore -= OnReleasedEntity;
     }
   }
 }

@@ -34,10 +34,9 @@ namespace Object.Pool
       }
 
       startPosition = position;
-      var obj = pools[type].Get();
-      var objT = obj as TComponent;
-      objSet?.Invoke(objT);
-      return objT;
+      var obj = pools[type].Get().GetComponent<TComponent>();
+      objSet?.Invoke(obj);
+      return obj;
     }
 
     public void Release<T>(T obj) where T : Component

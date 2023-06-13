@@ -10,6 +10,7 @@ using Utils;
 
 namespace Object.Entity.Fighter
 {
+  [RequireComponent(typeof(HpBar))]
   public abstract class FighterController : Entity
   {
     public Status status;
@@ -31,7 +32,7 @@ namespace Object.Entity.Fighter
 
     public abstract void Attack();
 
-    private HpBar hpBar;
+    protected HpBar hpBar;
 
     protected override void Awake()
     {
@@ -49,6 +50,20 @@ namespace Object.Entity.Fighter
       burningCoroutine = new(this, Burning);
 
       colorAnim = new(this, new(() => sr.color, value => sr.color = value));
+    }
+
+    public override void OnGet()
+    {
+      base.OnGet();
+      hpBar.maxHp = status.maxHp;
+      hpBar.curHp = status.hp;
+      hpBar.Init();
+    }
+
+    public override void OnReleased()
+    {
+      base.OnReleased();
+      hpBar.Release();
     }
 
     // Todo: on release -> stop all coroutine.
@@ -136,7 +151,7 @@ namespace Object.Entity.Fighter
       byte limit = byte.MaxValue
     )
     {
-      var hits = CheckHitBox((Vector2) pos.position + boxPos, boxSize, limit);
+      var hits = CheckHitBox((Vector2)pos.position + boxPos, boxSize, limit);
       foreach (var hit in hits)
       {
         hit.Hit(damage);
@@ -153,7 +168,7 @@ namespace Object.Entity.Fighter
       Vector2 boxSize,
       byte limit = byte.MaxValue
     )
-      => CheckHitBoxRepeat((Vector2) pos.position + boxPos, boxSize, opponent =>
+      => CheckHitBoxRepeat((Vector2)pos.position + boxPos, boxSize, opponent =>
       {
         opponent.Hit(damage);
         Managers.Element.ApplyPassive(this, opponent, element);
