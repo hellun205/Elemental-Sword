@@ -5150,7 +5150,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.1235905, y: 1.7972691}
+  m_Size: {x: 4.9625435, y: 1.7972691}
   m_EdgeRadius: 0
 --- !u!1 &447024612
 GameObject:
@@ -5958,7 +5958,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223319299}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -12.17, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6788,7 +6788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bc1449a97ca4fc8baa608ab55b462d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  changeElement: 304
+  changeElement: 101
   jump: 32
 --- !u!1 &1455458843
 GameObject:
@@ -8339,8 +8339,8 @@ MonoBehaviour:
   left: {fileID: 1515770717}
   bottom: {fileID: 1322154120}
   right: {fileID: 1294999957}
-  distance: 0.17
-  visibleDistance: 0.17
+  distance: -0.9
+  visibleDistance: 0.72
   invisibleDistance: -0.9
 --- !u!114 &2081501581
 MonoBehaviour:
