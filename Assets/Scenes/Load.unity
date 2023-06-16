@@ -7492,7 +7492,7 @@ GameObject:
   - component: {fileID: 1636412993}
   - component: {fileID: 1636412996}
   - component: {fileID: 1636412995}
-  - component: {fileID: 1636412994}
+  - component: {fileID: 1636412997}
   m_Layer: 0
   m_Name: Dialogue
   m_TagString: Untagged
@@ -7517,32 +7517,11 @@ RectTransform:
   m_Father: {fileID: 887155382}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -319.22678}
-  m_SizeDelta: {x: -445.205, y: -638.454}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 202.97}
+  m_SizeDelta: {x: 1474.795, y: 405.939}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &1636412994
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1636412992}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1636412995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7581,6 +7560,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1636412992}
   m_CullTransparentMesh: 1
+--- !u!114 &1636412997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636412992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 619c3c300d7d4029aee241ce47186da4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panel: {fileID: 0}
+  a:
+    direction: 0
+    avartar: {fileID: 0}
+    timingText:
+    - delay: 0
+      speed: 0
+      text: 
+    - delay: 0
+      speed: 0
+      text: 
+    - delay: 0
+      speed: 0
+      text: 
+    - delay: 0
+      speed: 0
+      text: 
 --- !u!1001 &1694963510
 PrefabInstance:
   m_ObjectHideFlags: 0
