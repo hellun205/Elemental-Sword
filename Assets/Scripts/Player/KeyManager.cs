@@ -7,6 +7,8 @@ namespace Player
   {
     public KeyCode changeElement = KeyCode.E;
 
+    public KeyCode dialogue = KeyCode.Space;
+
     public KeyCode jump = KeyCode.Space;
   }
 }

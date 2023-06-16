@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Dialogue;
 using Element;
 using Manager;
 using UnityEngine;
@@ -7,7 +8,7 @@ using Utils;
 
 namespace Object.Entity.Fighter.Player
 {
-  public class PlayerController : FighterController
+  public class PlayerController : FighterController, ITalker
   {
     private Rigidbody2D rigid;
 
@@ -19,6 +20,9 @@ namespace Object.Entity.Fighter.Player
 
     [SerializeField]
     private BoxCollider2D atkBound;
+
+    [SerializeField]
+    private Sprite _avartar;
 
     public override void Attack()
     {
@@ -81,5 +85,7 @@ namespace Object.Entity.Fighter.Player
     //     yield return new WaitForSeconds(5f);
     //   }
     // }
+    public Sprite avartar => _avartar;
+    public AvartarDirection avartarDirection => AvartarDirection.Left;
   }
 }

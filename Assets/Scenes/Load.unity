@@ -5989,6 +5989,7 @@ GameObject:
   - component: {fileID: 887155385}
   - component: {fileID: 887155384}
   - component: {fileID: 887155383}
+  - component: {fileID: 887155386}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -6078,6 +6079,20 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &887155386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 887155381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 619c3c300d7d4029aee241ce47186da4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftPanel: {fileID: 1636412997}
+  rightPanel: {fileID: 1636412997}
 --- !u!1 &934319865
 GameObject:
   m_ObjectHideFlags: 0
@@ -6453,6 +6468,7 @@ MonoBehaviour:
   damagedElement: 0
   state: 0
   atkBound: {fileID: 302262238}
+  _avartar: {fileID: 21300000, guid: 492b7326dbfd63b499a66be72a1b0dd9, type: 3}
 --- !u!114 &1262678711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7112,6 +7128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changeElement: 101
+  dialogue: 32
   jump: 32
 --- !u!1 &1465139048
 GameObject:
@@ -7499,7 +7516,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1636412993
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7569,26 +7586,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1636412992}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 619c3c300d7d4029aee241ce47186da4, type: 3}
+  m_Script: {fileID: 11500000, guid: 2cd0970588c24e77aad31ff35ae24b5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 0}
-  a:
-    direction: 0
-    avartar: {fileID: 0}
-    timingText:
-    - delay: 0
-      speed: 0
-      text: 
-    - delay: 0
-      speed: 0
-      text: 
-    - delay: 0
-      speed: 0
-      text: 
-    - delay: 0
-      speed: 0
-      text: 
+  tmp: {fileID: 504816684}
+  img: {fileID: 248473212}
 --- !u!1001 &1694963510
 PrefabInstance:
   m_ObjectHideFlags: 0

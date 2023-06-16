@@ -29,6 +29,7 @@ namespace Editor
         if (EditorGUI.EndChangeCheck())
           delay.floatValue = newVal;
       }
+      EditorGUI.EndProperty();
       
       contentPosition.x += 45f;
       
@@ -39,6 +40,7 @@ namespace Editor
         if (EditorGUI.EndChangeCheck())
           speed.floatValue = newVal;
       }
+      EditorGUI.EndProperty();
 
       contentPosition.x += 45f;
       EditorGUIUtility.labelWidth = 32f;
@@ -51,6 +53,7 @@ namespace Editor
         if (EditorGUI.EndChangeCheck())
           text.stringValue = newVal;
       }
+      EditorGUI.EndProperty();
     }
   }
 }
