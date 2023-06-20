@@ -34,6 +34,8 @@ namespace Object.Entity.Fighter
 
     protected HpBar hpBar;
 
+    protected bool isDead;
+
     protected override void Awake()
     {
       base.Awake();
@@ -50,6 +52,15 @@ namespace Object.Entity.Fighter
       burningCoroutine = new(this, Burning);
 
       colorAnim = new(this, new(() => sr.color, value => sr.color = value));
+      colorAnim.onEnded += ColorAnimOnonEnded;
+    }
+
+    private void ColorAnimOnonEnded(SmoothColor sender)
+    {
+      if (isDead)
+      {
+        Release();
+      }
     }
 
     public override void OnGet()
@@ -64,15 +75,25 @@ namespace Object.Entity.Fighter
     {
       base.OnReleased();
       hpBar.Release();
+      Debug.Log("asdasd");
     }
 
     // Todo: on release -> stop all coroutine.
 
     public virtual void Hit(float damage)
     {
+      if (isDead)
+        return;
       status.hp -= damage;
       hpBar.curHp = status.hp;
       hpBar.maxHp = status.maxHp;
+
+      if (status.hp <= 0)
+      {
+        isDead = true;
+        colorAnim.Start(Color.white, Color.clear, 3f);
+        return;
+      }
       colorAnim.Start(Color.red, Color.white, 3f);
     }
 

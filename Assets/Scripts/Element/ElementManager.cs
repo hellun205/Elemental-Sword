@@ -53,6 +53,8 @@ namespace Element
 
     public void ApplyPassive(FighterController attacker, FighterController target, SingleElement element)
     {
+      if (element == SingleElement.None)
+        return;
       elementSetting[element].passive.Invoke(attacker, target);
       target.damagedElement = element;
     }
